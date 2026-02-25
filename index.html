@@ -248,6 +248,15 @@
             page-break-before: always;
         }
 
+        .doc-image {
+            display: block;
+            margin: 30px auto;
+            max-width: 90%;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
         @media print {
             body {
                 padding: 0;
@@ -1184,6 +1193,7 @@
                     class="important-term client">app.component.html</span>, ה-<span
                     class="important-term client">app.component.scss</span> והלוגיקה ב-<span
                     class="important-term client">app.component.ts</span>.</p>
+            <img src="PIC/3.1.jpg" class="doc-image" alt="Client Loading Visual">
 
             <h4>2. תצוגת מסך הבית ועיצוב (Client)</h4>
             <p>הדפדפן מציג למשתמש את ה-<span class="important-term client">home.component.html</span> ומפעיל את ה-<span
@@ -1198,7 +1208,8 @@
                     class="important-term client">three-cube.component.html</span> ו-<span
                     class="important-term client">three-cube.component.scss</span>, ואנימציות מ-<span
                     class="important-term client">wheel.component.ts</span> כולל תמונה לדף הבית: <span
-                    class="important-term client">shake.png</span>.</p>
+                    class="important-term client">shake.jpg</span>.</p>
+            <img src="PIC/3.2.jpg" class="doc-image" alt="Section 2 Visual">
 
             <p><strong>הערה על מאחורי הקלעים:</strong> חוויה חלקה זו התאפשרה רק בגלל תהליך ה-Build הקפדני שקרה קודם לכן
                 במכונת המפתח על תיקיית הלקוח. בעזרת <span class="important-term client">angular.json</span>, <span
@@ -1229,6 +1240,7 @@
                 עוד לפני שהבקשה עוזבת לחלוטין את הדפדפן להמשך הדרך, ה-<span
                     class="important-term client">jwt.interceptor.ts</span> מוודא הזרקת אסימוני אבטחה במידה וישנם לשאר
                 מסלולי ה-<span class="important-term client">prerendered-routes.json</span>.</p>
+            <img src="PIC/3.3.jpg" class="doc-image" alt="Auth Request Visual">
 
             <p>כעת שיגרנו את הבקשה לרשת והיא נוחתת בעולם של השרת - אל תוך <span
                     class="important-term server">TenantRating.API</span>. השרת מתעורר דרך ה-<span
@@ -1248,6 +1260,7 @@
                 המודל <span class="important-term server">User.cs</span>. לשמחתנו, המשתמש נמצא ותואם! השרת מרכיב תשובה
                 חיובית עטופה כ-DTO, משגר אותה בחזרה דרך הבקר, והיא טסה אל מעבר לרשת חזרה לדפדפן של הלקוח.
             </p>
+            <img src="PIC/3.4.jpg" class="doc-image" alt="Database Interaction Visual">
 
             <h4>5. ניתוב המשתמש לאזור האישי (Client)</h4>
             <p>הדפדפן וקומפוננטת <span class="important-term client">auth.service.ts</span> מקבלים את האישור החיובי.
@@ -1265,6 +1278,7 @@
                         class="important-term client">cities.service.ts</span>. או אפילו עמודי איפוס סיסמא רגילים כ-
                     <span class="important-term client">reset-password.component.ts</span>).</em>
             </p>
+            <img src="PIC/3.5.jpg" class="doc-image" alt="User Dashboard Visual">
 
             <h4>6. יצירת בקשה חדשה והעברה לשרת (Client ל-Server)</h4>
             <p>השוכר המחובר מעוניין לפתוח פרופיל תיוג חדש. הוא ממלא פרטים ומעלה מסמכים. הלקוח אורז זאת ויורה בקשת HTTP
@@ -1280,6 +1294,7 @@
                 האלגוריתם המרכזי והמורכב - מחלקת ה-<span
                     class="important-term server">RentabilityScoreCalculator.cs</span> היישר מתיקיית ה-<span
                     class="important-term server">Logic</span> כדי להחליט על ציון השוכר הסופי.</p>
+            <img src="PIC/3.6.jpg" class="doc-image" alt="Scoring Logic Visual">
 
             <h4>7. שמירה במערכת והתקשרויות חוץ (פעולות Server עוקבות)</h4>
             <p>עם הציון המוכן, השרת מחזיר את שלב השמירה והתיווך לישות <span
@@ -1299,6 +1314,7 @@
                 <span class="important-term server">ResetPassword.html</span>). עם גמר העבודות, השרת משגר אישור סופי
                 וקליל אל השוכר הממתין עדיין בהתרגשות, חזרה בדפדפן הלקוח.
             </p>
+            <img src="PIC/3.7.jpg" class="doc-image" alt="External Services Visual">
 
             <h4>8. מאחורי הקלעים בעולם השרת (כלי פיתוח ותחזוקה)</h4>
             <p>ובזמן שאנחנו נרגעים, באפליקציה בולעים אוויר: יש כלי עזר מיוחדים שדואגים שמסד הנתונים לעולם לא יקרוס
@@ -1325,6 +1341,7 @@
                     class="important-term server">DataSeeder.cs</span>, או קריאת נתוני בניית ריצה ב-<span
                     class="important-term server">build_output.txt</span>.
             </p>
+            <img src="PIC/3.8.jpg" class="doc-image" alt="Dev Tools Visual">
         </div>
 
         <p style="text-align: center; margin-top: 50px; color: var(--secondary); font-size: 0.9em;">
