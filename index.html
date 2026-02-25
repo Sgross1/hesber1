@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenant Rating - מבנה וזרימת המערכת המלאה</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e3a8a;
+            --secondary: #475569;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --server-border: #3b82f6;
+            --client-border: #e11d48;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+
+        h1 {
+            color: var(--primary);
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 15px;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: var(--primary-dark);
+            border-right: 5px solid var(--primary);
+            padding-right: 15px;
+            margin-top: 50px;
+            font-size: 1.8em;
+            padding: 10px 15px 10px 0;
+        }
+
+        h3 {
+            color: var(--secondary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 5px;
+            margin-top: 30px;
+            font-size: 1.4em;
+        }
+
+        h4 {
+            color: #334155;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .folder-tree {
+            font-family: Consolas, monospace;
+            padding: 15px;
+            overflow-x: auto;
+            direction: ltr;
+            /* English file names */
+            text-align: left;
+        }
+
+        .folder-tree details {
+            margin-bottom: 5px;
+        }
+
+        .folder-tree summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .folder-tree summary:hover {
+            color: var(--primary);
+        }
+
+        .folder-tree ul {
+            list-style-type: none;
+            padding-left: 20px;
+            margin: 5px 0;
+            border-left: 1px dashed #cbd5e1;
+        }
+
+        .folder-tree li {
+            margin-bottom: 4px;
+            color: #475569;
+        }
+
+        .file {
+            color: #0c4a6e;
+        }
+
+        .file::before {
+            content: "📄 ";
+        }
+
+        .folder::before {
+            content: "📁 ";
+        }
+
+        .server-block {
+            border-right: 4px solid var(--server-border);
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .client-block {
+            border-right: 4px solid var(--client-border);
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .server-col {
+            border-right: 4px solid var(--server-border);
+            padding: 15px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .client-col {
+            border-right: 4px solid var(--client-border);
+            padding: 15px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .story-box p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+
+        .important-term {
+            font-family: Consolas, monospace;
+            font-weight: bold;
+            display: inline-block;
+            direction: ltr;
+        }
+
+        .important-term.server {
+            color: var(--server-border);
+        }
+
+        .important-term.client {
+            color: var(--client-border);
+        }
+
+        /* Glossary Tables */
+        table.glossary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            direction: rtl;
+        }
+
+        table.glossary-table th,
+        table.glossary-table td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: right;
+            vertical-align: top;
+        }
+
+        table.glossary-table th {
+            background-color: #f8fafc;
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        .server-block table.glossary-table {
+            border-right: 4px solid var(--server-border);
+        }
+
+        .client-block table.glossary-table {
+            border-right: 4px solid var(--client-border);
+        }
+
+        .glossary-table td:first-child {
+            width: 5%;
+            text-align: center;
+            background-color: #f1f5f9;
+        }
+
+        .glossary-table td:nth-child(2) {
+            width: 20%;
+            font-weight: bold;
+        }
+
+        .glossary-table td:nth-child(3) {
+            width: 30%;
+        }
+
+        .glossary-table td:last-child {
+            width: 45%;
+        }
+
+        .architecture-columns {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 30px;
+            align-items: flex-start;
+            margin-top: 30px;
+            font-size: 10.5px;
+        }
+
+        ul.glossary-list {
+            padding-right: 20px;
+        }
+
+        ul.glossary-list>li {
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        ul.glossary-list>li>strong {
+            color: #0f172a;
+        }
+
+        ol.glossary-impl {
+            margin-right: 25px;
+            margin-top: 8px;
+            color: #334155;
+            list-style-type: decimal;
+            font-size: 0.95em;
+            padding: 10px 35px 10px 10px;
+        }
+
+        ol.glossary-impl li {
+            margin-bottom: 4px;
+        }
+
+        .page-break {
+            break-before: page;
+            page-break-before: always;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 20px;
+            }
+
+            .folder-tree {
+                font-size: 0.85em;
+                padding: 10px;
+            }
+
+            .folder-tree details {
+                box-sizing: border-box;
+            }
+
+            .folder-tree summary::-webkit-details-marker {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Tenant Rating - מדריך הארכיטקטורה המורחב</h1>
+
+        <h2>1. מבנה התיקיות והקבצים (Project Architecture)</h2>
+
+
+        <div class="architecture-columns">
+            <div class="server-col">
+                <h3 style="margin-top: 0;">צד שרת - <span class="important-term server">TenantRating.API</span></h3>
+                <div class="folder-tree">
+                    <details open>
+                        <summary class="folder">TenantRating.API</summary>
+                        <ul>
+                            <li><span class="folder">bin</span></li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">Controllers</summary>
+                                    <ul>
+                                        <li class="file">AdminController.cs</li>
+                                        <li class="file">AuthController.cs</li>
+                                        <li class="file">LandlordsController.cs</li>
+                                        <li class="file">RequestsController.cs</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">Data</summary>
+                                    <ul>
+                                        <li>
+                                            <details open>
+                                                <summary class="folder">Entities</summary>
+                                                <ul>
+                                                    <li class="file">Request.cs</li>
+                                                    <li class="file">RequestStatus.cs</li>
+                                                    <li class="file">SavedRequest.cs</li>
+                                                    <li class="file">User.cs</li>
+                                                </ul>
+                                            </details>
+                                        </li>
+                                        <li class="file">AppDbContext.cs</li>
+                                        <li class="file">DataSeeder.cs</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">db_tools</summary>
+                                    <ul>
+                                        <li><span class="folder">node_modules</span></li>
+                                        <li class="file">db_dump.txt</li>
+                                        <li class="file">package-lock.json</li>
+                                        <li class="file">package.json</li>
+                                        <li class="file">read_db.js</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">DTOs</summary>
+                                    <ul>
+                                        <li class="file">AuthDtos.cs</li>
+                                        <li class="file">RequestDtos.cs</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">Logic</summary>
+                                    <ul>
+                                        <li class="file">RentabilityScoreCalculator.cs</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">Migrations</summary>
+                                    <ul>
+                                        <li class="file">20260208221643_InitialCreate.cs</li>
+                                        <li class="file">20260208221643_InitialCreate.Designer.cs</li>
+                                        <li class="file">AppDbContextModelSnapshot.cs</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">obj</summary>
+                                    <ul>
+                                        <li>
+                                            <details open>
+                                                <summary class="folder">Debug\net9.0</summary>
+                                                <ul>
+                                                    <li class="file">project.assets.json</li>
+                                                    <li class="file">project.nuget.cache</li>
+                                                    <li class="file">TenantRating.API.csproj.nuget.dgspec.json</li>
+                                                    <li class="file">TenantRating.API.csproj.nuget.g.props</li>
+                                                    <li class="file">TenantRating.API.csproj.nuget.g.targets</li>
+                                                </ul>
+                                            </details>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">Services</summary>
+                                    <ul>
+                                        <li class="file">AuthService.cs</li>
+                                        <li class="file">EmailTemplateService.cs</li>
+                                        <li class="file">IEmailService.cs</li>
+                                        <li class="file">IEmailTemplateService.cs</li>
+                                        <li class="file">IOcrService.cs</li>
+                                        <li class="file">ISmsService.cs</li>
+                                        <li class="file">OcrService.cs</li>
+                                        <li class="file">ResendEmailService.cs</li>
+                                        <li class="file">ScoringService.cs</li>
+                                        <li class="file">SmsService.cs</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">Templates</summary>
+                                    <ul>
+                                        <li class="file">RequestCreated.html</li>
+                                        <li class="file">ResetPassword.html</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li class="file">appsettings.json</li>
+                            <li class="file">build_output.txt</li>
+                            <li class="file">inspect_db.py</li>
+                            <li class="file">Program.cs</li>
+                            <li class="file">tenantrating_v2.db</li>
+                            <li class="file">TenantRating.API.csproj</li>
+                        </ul>
+                    </details>
+                </div>
+            </div>
+
+            <div class="client-col">
+                <h3 style="margin-top: 0;">צד לקוח - <span class="important-term client">TenantRating.Client</span></h3>
+                <div class="folder-tree">
+                    <details open>
+                        <summary class="folder">TenantRating.Client</summary>
+                        <ul>
+                            <li>
+                                <details open>
+                                    <summary class="folder">.angular\cache\19.2.19\TenantRating.Client</summary>
+                                    <ul>
+                                        <li>
+                                            <details open>
+                                                <summary class="folder">vite</summary>
+                                                <ul>
+                                                    <li><span class="folder">deps</span></li>
+                                                    <li><span class="folder">deps_ssr</span></li>
+                                                </ul>
+                                            </details>
+                                        </li>
+                                        <li class="file">.tsbuildinfo</li>
+                                        <li class="file">angular-compiler.db</li>
+                                        <li class="file">angular-compiler.db-lock</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">dist\tenant-rating-client</summary>
+                                    <ul>
+                                        <li>
+                                            <details open>
+                                                <summary class="folder">browser</summary>
+                                                <ul>
+                                                    <li><span class="folder">assets</span></li>
+                                                    <li class="file">chunk-J277PXRZ.js</li>
+                                                    <li class="file">chunk-XERIVZKL.js</li>
+                                                    <li class="file">index.html</li>
+                                                    <li class="file">main-C5ZIQ3YT.js</li>
+                                                    <li class="file">polyfills-B6TNHZQ6.js</li>
+                                                    <li class="file">styles-M7RAQLMU.css</li>
+                                                    <li class="file">3rdpartylicenses.txt</li>
+                                                </ul>
+                                            </details>
+                                        </li>
+                                        <li class="file">prerendered-routes.json</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li><span class="folder">node_modules</span></li>
+                            <li>
+                                <details open>
+                                    <summary class="folder">src</summary>
+                                    <ul>
+                                        <li>
+                                            <details open>
+                                                <summary class="folder">app</summary>
+                                                <ul>
+                                                    <li>
+                                                        <details open>
+                                                            <summary class="folder">core</summary>
+                                                            <ul>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">guards</summary>
+                                                                        <ul>
+                                                                            <li class="file">admin.guard.ts</li>
+                                                                            <li class="file">auth.guard.ts</li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">services</summary>
+                                                                        <ul>
+                                                                            <li class="file">admin.service.ts</li>
+                                                                            <li class="file">auth.service.ts</li>
+                                                                            <li class="file">cities.service.ts</li>
+                                                                            <li class="file">landlord.service.ts</li>
+                                                                            <li class="file">request.service.ts</li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li class="file">jwt.interceptor.ts</li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li>
+                                                        <details open>
+                                                            <summary class="folder">features</summary>
+                                                            <ul>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">admin</summary>
+                                                                        <ul>
+                                                                            <li class="file">
+                                                                                admin-dashboard.component.ts</li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">auth</summary>
+                                                                        <ul>
+                                                                            <li class="file">reset-password.component.ts
+                                                                            </li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">home</summary>
+                                                                        <ul>
+                                                                            <li class="file">home.component.html</li>
+                                                                            <li class="file">home.component.scss</li>
+                                                                            <li class="file">home.component.ts</li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">landlord\search
+                                                                        </summary>
+                                                                        <ul>
+                                                                            <li class="file">
+                                                                                landlord-search.component.html</li>
+                                                                            <li class="file">
+                                                                                landlord-search.component.scss</li>
+                                                                            <li class="file">
+                                                                                landlord-search.component.ts</li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">tenant\wizard</summary>
+                                                                        <ul>
+                                                                            <li class="file">
+                                                                                tenant-dashboard.component.ts</li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li>
+                                                        <details open>
+                                                            <summary class="folder">shared\components</summary>
+                                                            <ul>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">auth-modal</summary>
+                                                                        <ul>
+                                                                            <li class="file">auth-modal.component.html
+                                                                            </li>
+                                                                            <li class="file">auth-modal.component.scss
+                                                                            </li>
+                                                                            <li class="file">auth-modal.component.ts
+                                                                            </li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">three-cube</summary>
+                                                                        <ul>
+                                                                            <li class="file">three-cube.component.html
+                                                                            </li>
+                                                                            <li class="file">three-cube.component.scss
+                                                                            </li>
+                                                                            <li class="file">three-cube.component.ts
+                                                                            </li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li>
+                                                                    <details open>
+                                                                        <summary class="folder">wheel</summary>
+                                                                        <ul>
+                                                                            <li class="file">wheel.component.ts</li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li class="file">app.component.html</li>
+                                                    <li class="file">app.component.scss</li>
+                                                    <li class="file">app.component.ts</li>
+                                                    <li class="file">app.config.ts</li>
+                                                </ul>
+                                            </details>
+                                        </li>
+                                        <li>
+                                            <details open>
+                                                <summary class="folder">assets</summary>
+                                                <ul>
+                                                    <li class="file">favicon.svg</li>
+                                                    <li class="file">lines.png</li>
+                                                    <li class="file">loginRegister.jpeg</li>
+                                                    <li class="file">shake.png</li>
+                                                </ul>
+                                            </details>
+                                        </li>
+                                        <li class="file">index.html</li>
+                                        <li class="file">main.ts</li>
+                                        <li class="file">styles.scss</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li class="file">angular.json</li>
+                            <li class="file">package-lock.json</li>
+                            <li class="file">package.json</li>
+                            <li class="file">tsconfig.app.json</li>
+                            <li class="file">tsconfig.json</li>
+                        </ul>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <h2>2. מילון מושגים וטכניקות Full-Stack</h2>
+
+        <div class="server-block">
+            <h3>מושגי יסוד: צד השרת (Backend - .NET)</h3>
+
+            <table class="glossary-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>מושג</th>
+                        <th>סיכום והסבר</th>
+                        <th>מימושים וקבצים בפרויקט</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Controller (בקר)</strong></td>
+                        <td>"המדריך הרשמי" של השרת. מקבל את הבקשות מצד הלקוח, מנתב אותן למקום המתאים להמשך טיפול, ומחזיר
+                            את התשובה.</td>
+                        <td>
+                            <ol class="glossary-impl" style="margin:0; padding-right:20px;">
+                                <li><span class="important-term server">AdminController.cs</span> (לאזור מנהלים).</li>
+                                <li><span class="important-term server">AuthController.cs</span> (אימות).</li>
+                                <li><span class="important-term server">LandlordsController.cs</span> (בקשות בעלי
+                                    דירות).</li>
+                                <li><span class="important-term server">RequestsController.cs</span> (בקשות שוכרים).
+                                </li>
+                            </ol>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Service (שירות עסקי)</strong></td>
+                        <td>"המוח" של המערכת. ה-Controllers שולחים לכאן נתונים, וה-Service מכיל את הלוגיקה העסקית
+                            והחישובים.</td>
+                        <td>
+                            <ol class="glossary-impl" style="margin:0; padding-right:20px;">
+                                <li><span class="important-term server">AuthService.cs</span></li>
+                                <li><span class="important-term server">EmailTemplateService.cs</span> + I</li>
+                                <li><span class="important-term server">ResendEmailService.cs</span> + I</li>
+                                <li><span class="important-term server">OcrService.cs</span> + I</li>
+                                <li><span class="important-term server">SmsService.cs</span> + I</li>
+                                <li><span class="important-term server">ScoringService.cs</span></li>
+                            </ol>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>Model / Entity</strong></td>
+                        <td>ייצוג מחשובי של אובייקט מהעולם האמיתי המקביל לרוב לטבלה במסד הנתונים.</td>
+                        <td>
+                            <ol class="glossary-impl" style="margin:0; padding-right:20px;">
+                                <li><span class="important-term server">Request.cs</span></li>
+                                <li><span class="important-term server">RequestStatus.cs</span></li>
+                                <li><span class="important-term server">SavedRequest.cs</span></li>
+                                <li><span class="important-term server">User.cs</span></li>
+                            </ol>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>DTO</strong></td>
+                        <td>פילטר לתעבורת רשת. אובייקט "רזה" להעברת מידע בין הצדדים, ללא חשיפת מידע רגיש.</td>
+                        <td><span class="important-term server">AuthDtos.cs</span>, <span
+                                class="important-term server">RequestDtos.cs</span></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>ORM / DbContext</strong></td>
+                        <td>"המתורגמן" למסד הנתונים. מאפשר לתקשר עם המסד דרך קוד ב-C# ללא כתיבת SQL.</td>
+                        <td><span class="important-term server">AppDbContext.cs</span> משמש כגשר המרכזי.</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><strong>Migration</strong></td>
+                        <td>מנגנון לעדכון מסודר של מבנה מסד הנתונים בכל פעם שיש שינוי במודלים.</td>
+                        <td><span class="important-term server">20260208221643_InitialCreate.cs</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- עיצוב רשימה מקורי (גיבוי)
+            <ul class="glossary-list">
+                <li><strong>Controller (בקר):</strong> "המדריך הרשמי" של השרת. מקבל את הבקשות מצד הלקוח, מנתב אותן למקום
+                    המתאים להמשך טיפול, ומחזיר את התשובה.
+                    <ol class="glossary-impl">
+                        <li><span class="important-term server">AdminController.cs</span> (לאזור מנהלים).</li>
+                        <li><span class="important-term server">AuthController.cs</span> (לניהול כניסת משתמשים ואימות).
+                        </li>
+                        <li><span class="important-term server">LandlordsController.cs</span> (לניהול בקשות בעלי דירות).
+                        </li>
+                        <li><span class="important-term server">RequestsController.cs</span> (לקבלת וניהול בקשות
+                            שוכרים).
+                        </li>
+                    </ol>
+                </li>
+                <li><strong>Service (שירות עסקי):</strong> "המוח" של המערכת. ה-Controllers שולחים לכאן נתונים,
+                    וה-Service מכיל את הלוגיקה העסקית והחישובים.
+                    <ol class="glossary-impl">
+                        <li><span class="important-term server">AuthService.cs</span> (לוגיקת אימות).</li>
+                        <li><span class="important-term server">EmailTemplateService.cs</span> ו-<span
+                                class="important-term server">IEmailTemplateService.cs</span>.</li>
+                        <li><span class="important-term server">ResendEmailService.cs</span> ו-<span
+                                class="important-term server">IEmailService.cs</span> (לשליחת מיילים).</li>
+                        <li><span class="important-term server">OcrService.cs</span> ו-<span
+                                class="important-term server">IOcrService.cs</span> (למשיכת טקסט מת.ז).</li>
+                        <li><span class="important-term server">SmsService.cs</span> ו-<span
+                                class="important-term server">ISmsService.cs</span> (לשליחת הודעות).</li>
+                        <li><span class="important-term server">ScoringService.cs</span> (חישוב ומנהל דירוג).</li>
+                    </ol>
+                </li>
+                <li><strong>Model / Entity (מודל או ישות):</strong> ייצוג מחשובי של אובייקט מהעולם האמיתי המקביל לרוב
+                    לטבלה במסד הנתונים.
+                    <ol class="glossary-impl">
+                        <li><span class="important-term server">Request.cs</span> (בקשה).</li>
+                        <li><span class="important-term server">RequestStatus.cs</span> (סטטוס בקשה).</li>
+                        <li><span class="important-term server">SavedRequest.cs</span> (בקשה היסטורית שמורה).</li>
+                        <li><span class="important-term server">User.cs</span> (משתמש מערכת).</li>
+                    </ol>
+                </li>
+                <li><strong>DTO (Data Transfer Object):</strong> פילטר לתעבורת רשת. אובייקט "רזה" להעברת מידע בין
+                    הצדדים, ללא חשיפת מידע רגיש מה-Entity המלא.
+                    <ol class="glossary-impl">
+                        <li>האובייקטים מרוכזים בקבצי <span class="important-term server">AuthDtos.cs</span> ו-<span
+                                class="important-term server">RequestDtos.cs</span>.</li>
+                    </ol>
+                </li>
+                <li><strong>ORM / DbContext (כמו Entity Framework):</strong> "המתורגמן" למסד הנתונים. מאפשר לתקשר עם
+                    המסד דרך קוד ב-C# ללא כתיבת שאילתות SQL.
+                    <ol class="glossary-impl">
+                        <li><span class="important-term server">AppDbContext.cs</span> משמש כגשר המרכזי לתקשורת מול מסד
+                            הנתונים.</li>
+                    </ol>
+                </li>
+                <li><strong>Migration (מיגרציה):</strong> מנגנון לעדכון מסודר של מבנה מסד הנתונים בכל פעם שיש שינוי
+                    במודלים (Entities).
+                    <ol class="glossary-impl">
+                        <li>בקובץ <span class="important-term server">20260208221643_InitialCreate.cs</span> מוגדרת
+                            המיגרציה הראשונית של הפרויקט.</li>
+                    </ol>
+                </li>
+            </ul>
+            -->
+        </div>
+
+        <div class="client-block">
+            <h3>מושגי יסוד: צד הלקוח (Frontend - Angular)</h3>
+
+            <table class="glossary-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>מושג</th>
+                        <th>סיכום והסבר</th>
+                        <th>מימושים וקבצים בפרויקט</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Component (רכיב)</strong></td>
+                        <td>אבן הבניין של הממשק. מחלקת כל מסך לחתיכות קטנות עצמאיות הכוללות תבנית HTML, SCSS וקוד TS.
+                        </td>
+                        <td>
+                            <ol class="glossary-impl" style="margin:0; padding-right:20px;">
+                                <li><span class="important-term client">admin-dashboard.component.ts</span></li>
+                                <li><span class="important-term client">reset-password.component.ts</span></li>
+                                <li><span class="important-term client">home.component.ts/.html/.scss</span></li>
+                                <li><span class="important-term client">landlord-search.component.ts/.html/.scss</span>
+                                </li>
+                                <li><span class="important-term client">tenant-dashboard.component.ts</span></li>
+                                <li><span class="important-term client">auth-modal.component.ts/.html/.scss</span></li>
+                                <li><span class="important-term client">three-cube.component.ts/.html/.scss</span></li>
+                                <li><span class="important-term client">wheel.component.ts</span></li>
+                                <li><span class="important-term client">app.component.ts/.html/.scss</span></li>
+                            </ol>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Service (שירות לקוח)</strong></td>
+                        <td>שירות האחראי על פעולות חוצות-קומפוננטות כמו קריאות API מול השרת (לקבלת נתונים).</td>
+                        <td>
+                            <ol class="glossary-impl" style="margin:0; padding-right:20px;">
+                                <li><span class="important-term client">admin.service.ts</span></li>
+                                <li><span class="important-term client">auth.service.ts</span></li>
+                                <li><span class="important-term client">cities.service.ts</span></li>
+                                <li><span class="important-term client">landlord.service.ts</span></li>
+                                <li><span class="important-term client">request.service.ts</span></li>
+                            </ol>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>Guard (שומר ניתוב)</strong></td>
+                        <td>פונקציית ביקורת שמופעלת לפני הניתוב לעמוד מסוים כדי לבדוק האם ההרשאה חוקית כרגע.</td>
+                        <td><span class="important-term client">auth.guard.ts</span>, <span
+                                class="important-term client">admin.guard.ts</span></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>Interceptor (מיירט)</strong></td>
+                        <td>תחנת מעבר אוטומטית ש"תופסת" בקשות HTTP ומשנה אותן לפני יציאתן מחוץ ללקוח.</td>
+                        <td><span class="important-term client">jwt.interceptor.ts</span> (הזרקת Token).</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>Module / Chunk</strong></td>
+                        <td>טעינה הדרגתית (Lazy Loading) ההופכת את הקוד לנתחים שנטענים בזמן אמת ולא כגוש כבד.</td>
+                        <td><span class="important-term client">chunk-J277PXRZ.js</span>, <span
+                                class="important-term client">chunk-XERIVZKL.js</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- עיצוב רשימה מקורי (גיבוי)
+            <ul class="glossary-list">
+                <li><strong>Component (רכיב / קומפוננטה):</strong> אבן הבניין של הממשק. מחלקת כל מסך לחתיכות קטנות
+                    עצמאיות הכוללות תבנית HTML, SCSS וקוד TS.
+                    <ol class="glossary-impl">
+                        <li><span class="important-term client">admin-dashboard.component.ts</span> (מסך הנהלה).</li>
+                        <li><span class="important-term client">reset-password.component.ts</span> (איפוס סיסמא).</li>
+                        <li><span class="important-term client">home.component.ts/.html/.scss</span> (מסך הבית).</li>
+                        <li><span class="important-term client">landlord-search.component.ts/.html/.scss</span> (חיפוש
+                            לבעלי דירות).</li>
+                        <li><span class="important-term client">tenant-dashboard.component.ts</span> (מסך השוכר הדייר).
+                        </li>
+                        <li><span class="important-term client">auth-modal.component.ts/.html/.scss</span> (חלונית
+                            ההתחברות).</li>
+                        <li><span class="important-term client">three-cube.component.ts/.html/.scss</span> (הקוביה התלת
+                            מימדית).</li>
+                        <li><span class="important-term client">wheel.component.ts</span> (גלגל בבית).</li>
+                        <li><span class="important-term client">app.component.ts/.html/.scss</span> (קומפוננטת האב
+                            המחזיקה הכל).</li>
+                    </ol>
+                </li>
+                <li><strong>Service (שירות צד לקוח):</strong> שירות האחראי על פעולות חוצות-קומפוננטות כמו קריאות API מול
+                    השרת (לקבלת נתונים).
+                    <ol class="glossary-impl">
+                        <li><span class="important-term client">admin.service.ts</span> (תקשורת מנהלים).</li>
+                        <li><span class="important-term client">auth.service.ts</span> (אימות מול השרת).</li>
+                        <li><span class="important-term client">cities.service.ts</span> (שירות חיצוני למשיכת רשימת
+                            ערים).</li>
+                        <li><span class="important-term client">landlord.service.ts</span> (תקשורת בחיפוש משכירים).</li>
+                        <li><span class="important-term client">request.service.ts</span> (לניהול סטטוסי הבקשות).</li>
+                    </ol>
+                </li>
+                <li><strong>Guard (שומר ניתוב):</strong> פונקציית ביקורת שמופעלת לפני הניתוב לעמוד מסוים כדי לבדוק האם
+                    ההרשאה חוקית כרגע.
+                    <ol class="glossary-impl">
+                        <li><span class="important-term client">auth.guard.ts</span> לאימות משתמש, ו- <span
+                                class="important-term client">admin.guard.ts</span> לחסימת אזור לפרטי מנהל בלבד.</li>
+                    </ol>
+                </li>
+                <li><strong>Interceptor (מיירט בקשות):</strong> תחנת מעבר אוטומטית ש"תופסת" בקשות HTTP ומשנה אותן לפני
+                    יציאתן מחוץ ללקוח.
+                    <ol class="glossary-impl">
+                        <li><span class="important-term client">jwt.interceptor.ts</span> אחראק לשתול אסימוני אבטחה
+                            בבקשת API יוצאת.</li>
+                    </ol>
+                </li>
+                <li><strong>Module / Chunk (קיטוע קוד עצמאי):</strong> טעינה הדרגתית, טכניקה (Lazy Loading) ההופכת את
+                    הקוד לנתחים שנטענים בזמן אמת ולא כגוש כבד.
+                    <ol class="glossary-impl">
+                        <li>קבצי צד הלקוח שנאגרים לחתיכות מפוזרות נמצאים תחת תיקיית ה-dist תחת השמות: <span
+                                class="important-term client">chunk-J277PXRZ.js</span>, <span
+                                class="important-term client">chunk-XERIVZKL.js</span>.</li>
+                    </ol>
+                </li>
+            </ul>
+            -->
+        </div>
+
+
+        <div class="story-box page-break" style="padding: 20px; border-right: 4px solid var(--secondary);">
+            <h3>2. עקרונות וטכניקות Full-Stack (הארכיטקטורה שמאחורי הקלעים)</h3>
+
+            <table class="glossary-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>עקרון / דפוס (Architecture Concept)</th>
+                        <th>הסבר ולוגיקה (Logic & Explanation)</th>
+                        <th>מימוש ודוגמאות (Implementation)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Thin Controller / Fat Service</strong><br>(בקר רזה / שירות שמן)</td>
+                        <td>ה-Controller לא מבצע לוגיקה עסקית אלא רק מתווך. ה-Service מבצע את העבודה האמיתית, החישובים
+                            והלוגיקה.</td>
+                        <td>
+                            <ul style="margin:0; padding-right:15px;">
+                                <li><span class="important-term server">AuthController</span> &rarr; <span
+                                        class="important-term server">AuthService</span></li>
+                                <li><span class="important-term server">RequestsController</span> &rarr; <span
+                                        class="important-term server">ScoringService</span></li>
+                                <li><span class="important-term server">AdminController</span> &rarr; <span
+                                        class="important-term server">AdminService</span></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Component-Service Pattern</strong><br>(דפוס רכיב-שירות)</td>
+                        <td>ה-Component לא מדבר ישירות עם ה-Network ולא מכיל לוגיקה מורכבת. הכל עובר דרך שירותים
+                            (Services).</td>
+                        <td>
+                            <ul style="margin:0; padding-right:15px;">
+                                <li><span class="important-term client">auth.component</span> &rarr; <span
+                                        class="important-term client">auth.service</span></li>
+                                <li><span class="important-term client">tenant-dashboard</span> &rarr; <span
+                                        class="important-term client">request.service</span></li>
+                                <li><span class="important-term client">admin-dashboard</span> &rarr; <span
+                                        class="important-term client">admin.service</span></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>Dependency Injection & Abstraction</strong><br>(הזרקת תלות והפשטה)</td>
+                        <td>עבודה מול <strong>Interface</strong> ולא מול מימוש ישיר (DIP מתוך SOLID). מאפשר החלפת ספקים
+                            בקלות.</td>
+                        <td>
+                            <ul style="margin:0; padding-right:15px;">
+                                <li><span class="important-term server">IOcrService</span> &rarr; <span
+                                        class="important-term server">OcrService</span></li>
+                                <li><span class="important-term server">ISmsService</span> &rarr; <span
+                                        class="important-term server">SmsService</span></li>
+                                <li><span class="important-term server">IEmailService</span> &rarr; <span
+                                        class="important-term server">ResendEmailService</span></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>Pipeline Pattern</strong><br>(דפוס צינור נתונים)</td>
+                        <td>כל בקשה עוברת רצף קבוע: <br>HTTP &rarr; Controller &rarr; Service &rarr; Logic &rarr; Data
+                            &rarr; Response.</td>
+                        <td>
+                            <div
+                                style="font-size: 0.85em; background: #f8fafc; padding: 5px; border-radius: 4px; font-family: monospace;">
+                                <strong>Login:</strong> Client &rarr; Ctrl &rarr; Svc &rarr; DB &rarr; Svc &rarr; Ctrl
+                                &rarr; Client<br>
+                                <strong>Create Request:</strong> Client &rarr; Ctrl &rarr; OCR &rarr; Scoring &rarr; DB
+                                &rarr; Msg &rarr; Client
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>DTO Boundary</strong><br>(גבול אובייקטי העברת נתונים)</td>
+                        <td>שימוש ב-Data Transfer Objects כ-<strong>Anti-Corruption Layer</strong> להגנה על מבנה ה-DB
+                            ומניעת חשיפת מידע רגיש.</td>
+                        <td><span class="important-term server">AuthDtos.cs</span>, <span
+                                class="important-term server">RequestDtos.cs</span></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><strong>Gatekeeper Pattern</strong><br>(דפוס שומר הסף)</td>
+                        <td>שכבת בדיקה והרשאות קריטית שמתבצעת לפני גישה למידע או ביצוע פעולה.</td>
+                        <td>
+                            <strong>Client:</strong> <span class="important-term client">auth.guard.ts</span>, <span
+                                class="important-term client">admin.guard.ts</span><br>
+                            <strong>Server:</strong> JWT, Interceptors.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><strong>Orchestrator Pattern</strong><br>(דפוס המנצח/מתזמר)</td>
+                        <td>גורם אחד מרכזי שמנהל, מתזמן ומסנכרן את כל שירותי העזר מבלי לבצע הכל בעצמו.</td>
+                        <td>
+                            <strong>ה-ScoringService מפעיל:</strong><br>
+                            OCR &rarr; אלגוריתם דירוג &rarr; שמירה ב-DB &rarr; שליחת הודעות.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><strong>Cross Cutting Concerns</strong><br>(נושאים חוצי מערכת)</td>
+                        <td>פונקציונליות שחוצה את כל המערכת (Logging, Security, DB Access) ומוזרקת כשירותים גלובליים.
+                        </td>
+                        <td>JWT Interceptor, DbContext, Email/SMS Services.</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td><strong>Build Artifact Architecture</strong><br>(ארכיטקטורת תוצרי בניה)</td>
+                        <td>תהליך קומפילציה שבו קוד המקור הופך לתוצרי ריצה (Artifacts) שלא מורצים ישירות.</td>
+                        <td>
+                            <strong>Client:</strong> <span class="important-term client">angular.json</span> &rarr;
+                            dist<br>
+                            <strong>Server:</strong> <span class="important-term server">csproj</span> &rarr; bin/obj.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div
+                style="background: #eff6ff; padding: 15px; border-radius: 8px; margin-top: 25px; border-right: 4px solid var(--primary);">
+                <p><strong>🧠 לסיכום: Clean Architecture (גרסה פרקטית)</strong><br>
+                    המערכת מורכבת מ-3 שכבות ברורות: <strong>Presentation</strong> (Angular),
+                    <strong>Application</strong> (Services), ו-<strong>Infrastructure</strong> (DbContext / External
+                    APIs).
+                </p>
+            </div>
+
+            <!-- עיצוב מקורי (גיבוי)
+            <div class="server-block">
+                <h4>🟢 צד השרת (ASP.NET Core): הקפדה על סדר</h4>
+
+                <ul class="glossary-list">
+                    <li><span class="important-term server">AuthController</span> &rarr; <span
+                            class="important-term server">AuthService</span></li>
+                    <li><span class="important-term server">RequestsController</span> &rarr; <span
+                            class="important-term server">ScoringService</span> / <span
+                            class="important-term server">IOcrService</span></li>
+                    <li><span class="important-term server">LandlordsController</span> &rarr; <span
+                            class="important-term server">LandlordService</span></li>
+                    <li><span class="important-term server">AdminController</span> &rarr; <span
+                            class="important-term server">AdminService</span></li>
+                </ul>
+                <p>בכל המקומות האלה המערכת פועלת לפי עקרון <strong>Thin Controller / Fat Service Pattern</strong>:</p>
+                <ul style="list-style-type: none;">
+                    <li>🔹 ה-Controller לא מבצע לוגיקה עסקית — הוא רק מתווך (מקבל DTO, קורא ל-Service, מחזיר תשובה).
+                    </li>
+                    <li>🔹 ה-Service מבצע את העבודה האמיתית (מפעיל לוגיקה, מתקשר עם ה-DB, מפעיל שירותים נוספים
+                        ואלגוריתמים).</li>
+                </ul>
+            </div>
+
+            <div class="client-block">
+                <h4>🟢 צד הלקוח (Angular): שיקוף של עקרונות השרת</h4>
+                <p>אותו עיקרון חוזר שוב בדיוק גבוה:</p>
+                <ul class="glossary-list">
+                    <li><span class="important-term client">auth.component</span> &rarr; <span
+                            class="important-term client">auth.service</span></li>
+                    <li><span class="important-term client">tenant-dashboard</span> &rarr; <span
+                            class="important-term client">request.service</span></li>
+                    <li><span class="important-term client">landlord-search</span> &rarr; <span
+                            class="important-term client">landlord.service</span></li>
+                    <li><span class="important-term client">admin-dashboard</span> &rarr; <span
+                            class="important-term client">admin.service</span></li>
+                </ul>
+                <ul style="list-style-type: none;">
+                    <li>🔹 ה-Component לא מדבר ישירות עם ה-Network ולא מכיל לוגיקה עסקית מורכבת.</li>
+                    <li>🔹 הכל עובר דרך ה-Service — בדיוק כמו בשרת.</li>
+                </ul>
+            </div>
+
+            <h4>🔁 Dependency Injection + Abstraction דרך Interfaces</h4>
+            <p>עקרון שחוזר חזק (Dependency Inversion Principle מתוך SOLID): אתה עיבוד מול <strong>Interface</strong> ולא
+                מול מימוש ישיר.</p>
+            <ul class="glossary-list">
+                <li><span class="important-term server">IOcrService</span> &rarr; <span
+                        class="important-term server">OcrService</span></li>
+                <li><span class="important-term server">ISmsService</span> &rarr; <span
+                        class="important-term server">SmsService</span></li>
+                <li><span class="important-term server">IEmailService</span> &rarr; <span
+                        class="important-term server">ResendEmailService</span></li>
+            </ul>
+            <p>זה מאפשר <strong>Plug & Replace Architecture</strong>: אפשר להחליף מנגנון מייל או OCR בלי לשנות שורה אחת
+                ב-Controller.</p>
+
+            <h4>🔁 Z = Flow אחיד של בקשה (Pipeline Pattern)</h4>
+            <p>כל בקשה במערכת עוברת רצף קבוע של <strong>Layered Architecture</strong>:</p>
+            <div
+                style="background: #f8fafc; padding: 15px; border-radius: 5px; font-family: monospace; margin-bottom: 20px;">
+                <p><strong>ב-Login:</strong><br>
+                    Client &rarr; Controller &rarr; Service &rarr; DbContext &rarr; Service &rarr; Controller &rarr;
+                    Client</p>
+
+                <p><strong>ב-Create Request:</strong><br>
+                    Client &rarr; Controller &rarr; OCR &rarr; Scoring &rarr; DbContext &rarr; SMS/Email &rarr; Client
+                </p>
+
+                <p><strong>בכל פעולה אחרת:</strong><br>
+                    Client &rarr; Controller &rarr; Service &rarr; DbContext &rarr; Client</p>
+            </div>
+            <p
+                style="text-align: center; font-family: monospace; background: #f1f5f9; padding: 10px; border-radius: 5px;">
+                HTTP &rarr; Controller &rarr; Service &rarr; Logic &rarr; Data &rarr; External &rarr; Response
+            </p>
+
+            <h4>🔁 DTO Boundary: הגנה על הנתונים</h4>
+            <p>שימוש ב-<span class="important-term server">AuthDtos.cs</span> ו-<span
+                    class="important-term server">RequestDtos.cs</span> יוצר <strong>Anti-Corruption Layer</strong>. אתה
+                לא מעביר ישויות DB ישירות ללקוח, מה שמונע חשיפת נתונים רגישים ומנתק את התלות בין ה-Database ל-Frontend.
+            </p>
+
+            <h4>🔁 Guard & Gatekeeper Pattern</h4>
+            <p>שכבת ה-Authorization חוזרת בשני הצדדים: ב-Angular דרך <span
+                    class="important-term client">auth.guard.ts</span> ו-<span
+                    class="important-term client">admin.guard.ts</span>, ובשרת דרך JWT ו-Interceptors. זוהי שכבת בדיקה
+                קריטית לפני כל פעולה.</p>
+
+            <h4>🔁 Orchestration Pattern: המנצח על התזמורת</h4>
+            <div style="border-right: 2px solid var(--border); padding-right: 15px; margin-bottom: 15px;">
+                <p><strong>ב-Create Request:</strong> מי מנהל את כל התהליך?</p>
+                <ul style="list-style-type: none; margin-bottom: 10px;">
+                    <li>❌ לא ה-Controller</li>
+                    <li>❌ לא ה-OCR</li>
+                    <li>❌ לא ה-Scoring</li>
+                </ul>
+                <p>אלא: <strong>ScoringService</strong>. הוא זה שמפעיל ומסנכרן את כולם:</p>
+                <ul style="list-style-type: square; margin-right: 20px;">
+                    <li>ממשק OCR לעיבוד מסמכים</li>
+                    <li>אלגוריתם דירוג לחישוב התוצאה</li>
+                    <li>שמירה ב-Database</li>
+                    <li>שליחת הודעות ומיילים</li>
+                </ul>
+                <p>זה נקרא: <strong>➜ Application Service / Orchestrator Pattern</strong>. הוא לא מבצע הכל בעצמו, אבל
+                    הוא "מתזמן" את כל המערכת.</p>
+            </div>
+
+            <h4>🔁 Cross Cutting Concerns</h4>
+            <p>דברים שחוצים את כל המערכת כמו Logging, Security (JWT), ושירותי הודעות גלובליים, ממומשים
+                כ-<strong>Middleware</strong> או כשירותים מוזרקים (DI) שזמינים בכל מקום.</p>
+
+            <h4>🔁 Build Pipeline: תהליך יצירת תוצרים</h4>
+            <p>גם בלקוח (<span class="important-term client">angular.json</span> &rarr; <span
+                    class="important-term client">dist</span>) וגם בשרת (<span
+                    class="important-term server">csproj</span> &rarr; <span
+                    class="important-term server">bin/obj</span>), המערכת לא מריצה קוד מקור ישירות אלא עוברת שלב
+                קומפילציה המייצר <strong>Build Artifacts</strong>.</p>
+
+            <div
+                style="background: #eff6ff; padding: 15px; border-radius: 8px; margin-top: 25px; border-right: 4px solid var(--primary);">
+                <p><strong>🧠 לסיכום:</strong> למרות שלא נכתב במפורש, המערכת בנויה בגרסה פרקטית של <strong>Clean
+                        Architecture</strong> הכוללת שלוש שכבות ברורות: <strong>Presentation</strong> (Angular),
+                    <strong>Application</strong> (Services), ו-<strong>Infrastructure</strong> (DbContext / APIs
+                    חיצוניים).
+                </p>
+            </div>
+            -->
+        </div>
+
+        <h2>3. סיפור הזרימה: המסע השלם של בקשה במערכת</h2>
+        <div class="story-box">
+
+            <h4>1. כניסת המשתמש וטעינת הלקוח (Client)</h4>
+            <p>הכל מתחיל בעולם של <span class="important-term client">TenantRating.Client</span>. כאשר משתמש נכנס
+                למערכת, הדפדפן טוען את קובץ ה-<span class="important-term client">index.html</span> (שנמצא תחת <span
+                    class="important-term client">src</span>). מאחורי הקלעים, Angular מתעורר דרך ה-<span
+                    class="important-term client">main.ts</span> ומשתמש בהגדרות מ-<span
+                    class="important-term client">app.config.ts</span> כדי לאתחל את המסגרת העיקרית - מרכיבי ה-<span
+                    class="important-term client">app.component.html</span>, ה-<span
+                    class="important-term client">app.component.scss</span> והלוגיקה ב-<span
+                    class="important-term client">app.component.ts</span>.</p>
+
+            <h4>2. תצוגת מסך הבית ועיצוב (Client)</h4>
+            <p>הדפדפן מציג למשתמש את ה-<span class="important-term client">home.component.html</span> ומפעיל את ה-<span
+                    class="important-term client">home.component.ts</span>. העיצוב הגלובלי נשאב מ-<span
+                    class="important-term client">styles.scss</span> יחד עם תמונות ואייקונים מה-<span
+                    class="important-term client">assets</span>: כגון הרקע <span
+                    class="important-term client">lines.png</span>, הסמליל <span
+                    class="important-term client">favicon.svg</span>, ותמונת ההתחברות <span
+                    class="important-term client">loginRegister.jpeg</span>. זהו ממשק מרהיב המפעיל גם את עיצוב ה- <span
+                    class="important-term client">home.component.scss</span> ומשלב אלמנטים תלת מימדיים של <span
+                    class="important-term client">three-cube.component.ts</span>, <span
+                    class="important-term client">three-cube.component.html</span> ו-<span
+                    class="important-term client">three-cube.component.scss</span>, ואנימציות מ-<span
+                    class="important-term client">wheel.component.ts</span> כולל תמונה לדף הבית: <span
+                    class="important-term client">shake.png</span>.</p>
+
+            <p><strong>הערה על מאחורי הקלעים:</strong> חוויה חלקה זו התאפשרה רק בגלל תהליך ה-Build הקפדני שקרה קודם לכן
+                במכונת המפתח על תיקיית הלקוח. בעזרת <span class="important-term client">angular.json</span>, <span
+                    class="important-term client">package.json</span>, <span
+                    class="important-term client">package-lock.json</span> ו-<span
+                    class="important-term client">tsconfig.json</span> (ותצורתו באפליקציה <span
+                    class="important-term client">tsconfig.app.json</span>), קבצי הלקוח קומפלו דרך מערכת ה-<span
+                    class="important-term client">.angular\cache</span> שם בצעו עבודתם <span
+                    class="important-term client">.tsbuildinfo</span>, <span
+                    class="important-term client">angular-compiler.db</span>, כלי פיתוח פנימים, <span
+                    class="important-term client">vite</span>, <span class="important-term client">deps</span> ותלויות
+                ה-<span class="important-term client">node_modules</span> לתיקיית הסיום <span
+                    class="important-term client">dist\tenant-rating-client\browser</span>. תוצר זה ארז את חוקי הבניה,
+                והפיק קבצים מוכנים לדפדפן כמו <span class="important-term client">main-C5ZIQ3YT.js</span>, הפוליפילז
+                <span class="important-term client">polyfills-B6TNHZQ6.js</span>, התצורה הכללית של אבזור המערכת, קובץ
+                ה-<span class="important-term client">3rdpartylicenses.txt</span> ואוסף החתיכות הרזות <span
+                    class="important-term client">chunk-J277PXRZ.js</span> ו-<span
+                    class="important-term client">chunk-XERIVZKL.js</span> שעיצבו לבסוף את קובץ ה-<span
+                    class="important-term client">styles-M7RAQLMU.css</span>.
+            </p>
+
+            <h4>3. ניסיון אימות ראשון (Client ל-Server)</h4>
+            <p>המשתמש (נניח שוכר) לוחץ על כפתור התחברות. קופצת חלונית ה-<span
+                    class="important-term client">auth-modal.component.html</span> (הנתמכת על ידי קובץ העיצוב שלה <span
+                    class="important-term client">auth-modal.component.scss</span> והקוד שלה <span
+                    class="important-term client">auth-modal.component.ts</span>). כשהוא מזין את פרטיו ולוחץ שלח, הקריאה
+                מועברת ל-<span class="important-term client">auth.service.ts</span> בצד הלקוח. השירות מייצר בקשת HTTP.
+                עוד לפני שהבקשה עוזבת לחלוטין את הדפדפן להמשך הדרך, ה-<span
+                    class="important-term client">jwt.interceptor.ts</span> מוודא הזרקת אסימוני אבטחה במידה וישנם לשאר
+                מסלולי ה-<span class="important-term client">prerendered-routes.json</span>.</p>
+
+            <p>כעת שיגרנו את הבקשה לרשת והיא נוחתת בעולם של השרת - אל תוך <span
+                    class="important-term server">TenantRating.API</span>. השרת מתעורר דרך ה-<span
+                    class="important-term server">Program.cs</span> תוך שאיבת הגדרות סביבה מ-<span
+                    class="important-term server">appsettings.json</span>. ה-<span
+                    class="important-term server">AuthController.cs</span> מתיקיית ה-<span
+                    class="important-term server">Controllers</span> הוא זה שלוכד את בקשת ההתחברות. הבקר הופך את המידע
+                הנכנס לאובייקט מתאים מקובץ ה-<span class="important-term server">AuthDtos.cs</span>, ומעביר את המשימה
+                הלאה אל המוח – אל ה-<span class="important-term server">AuthService.cs</span> המצוי בתיקיית ה-<span
+                    class="important-term server">Services</span>.</p>
+
+            <h4>4. עבודה מול מסד הנתונים והחזרת תשובה (Server ל-Client)</h4>
+            <p>ה-<span class="important-term server">AuthService.cs</span> צריך לבדוק אם המשתמש קיים. הוא פונה לשכבת
+                הנתונים (ה-<span class="important-term server">Data</span>) ומתקשר עם מסד הנתונים הפיזי, הגיבוי השמור
+                <span class="important-term server">tenantrating_v2.db</span>. גישה זו נעשית דרך ה-<span
+                    class="important-term server">AppDbContext.cs</span>. ההשוואה מתבצעת מול נתוני הישות השמורים תחת
+                המודל <span class="important-term server">User.cs</span>. לשמחתנו, המשתמש נמצא ותואם! השרת מרכיב תשובה
+                חיובית עטופה כ-DTO, משגר אותה בחזרה דרך הבקר, והיא טסה אל מעבר לרשת חזרה לדפדפן של הלקוח.
+            </p>
+
+            <h4>5. ניתוב המשתמש לאזור האישי (Client)</h4>
+            <p>הדפדפן וקומפוננטת <span class="important-term client">auth.service.ts</span> מקבלים את האישור החיובי.
+                כעת, שומר הניתוב ב-<span class="important-term client">auth.guard.ts</span> נותן אור ירוק לניתוב, והלקוח
+                מחליף את עמוד הבית בעמוד האזור האישי: ה-<span
+                    class="important-term client">tenant-dashboard.component.ts</span> נטען. הממשק החדש למשתמש הסטטוסים
+                מבוסס על שירות בדיקות מותאם - <span class="important-term client">request.service.ts</span>.
+                <br><br><em>(חריג: אם מדובר היה במנהל מערכת, ה-<span class="important-term client">admin.guard.ts</span>
+                    היה מתיר גישה ל-<span class="important-term client">admin-dashboard.component.ts</span> שמקבל נתונים
+                    מ-<span class="important-term client">admin.service.ts</span>, ואילו לשוכרים מחפשים יש את אזור
+                    ה-<span class="important-term client">landlord-search.component.html</span> מלווה בעיצוב <span
+                        class="important-term client">landlord-search.component.scss</span>, קוד <span
+                        class="important-term client">landlord-search.component.ts</span> עם שימוש בשירותי עזר <span
+                        class="important-term client">landlord.service.ts</span> וחיפוש בערים מול <span
+                        class="important-term client">cities.service.ts</span>. או אפילו עמודי איפוס סיסמא רגילים כ-
+                    <span class="important-term client">reset-password.component.ts</span>).</em>
+            </p>
+
+            <h4>6. יצירת בקשה חדשה והעברה לשרת (Client ל-Server)</h4>
+            <p>השוכר המחובר מעוניין לפתוח פרופיל תיוג חדש. הוא ממלא פרטים ומעלה מסמכים. הלקוח אורז זאת ויורה בקשת HTTP
+                חדשה אל השרת. הפעם הבקשה נוחתת ב-<span class="important-term server">RequestsController.cs</span> (או אם
+                היה זה בעל בית ל-<span class="important-term server">LandlordsController.cs</span> או למנהלי האתר
+                ב-<span class="important-term server">AdminController.cs</span>).</p>
+
+            <p>שרת ה-.NET תופס פיקוד: המידע (שב-<span class="important-term server">RequestDtos.cs</span>) מחולק
+                למקצוענים - על מנת לקרוא נתונים אוטומטית ממסמכי הזהות, מופעל ה-<span
+                    class="important-term server">IOcrService.cs</span> (והמימוש בפועל שבו <span
+                    class="important-term server">OcrService.cs</span>). לאחר התהליך המרתק הזה הנתונים החדשים עוברים אל
+                שירות הדירוג הראשי ה-<span class="important-term server">ScoringService.cs</span>. זה האחרון מפעיל את
+                האלגוריתם המרכזי והמורכב - מחלקת ה-<span
+                    class="important-term server">RentabilityScoreCalculator.cs</span> היישר מתיקיית ה-<span
+                    class="important-term server">Logic</span> כדי להחליט על ציון השוכר הסופי.</p>
+
+            <h4>7. שמירה במערכת והתקשרויות חוץ (פעולות Server עוקבות)</h4>
+            <p>עם הציון המוכן, השרת מחזיר את שלב השמירה והתיווך לישות <span
+                    class="important-term server">Request.cs</span> ומעדכן את המצב במערכו לפי <span
+                    class="important-term server">RequestStatus.cs</span> ובגיבוי <span
+                    class="important-term server">SavedRequest.cs</span>. שוב הכול מגובה דרך ה-<span
+                    class="important-term server">AppDbContext.cs</span> אל מסד הנתונים הראשי.</p>
+            <p>לסיום סיומת של תהליך, השרת יוצא ומעדכן גורמים בעזרת שרתים חיצונים – הוא מפעיל ממשקי הודעות <span
+                    class="important-term server">ISmsService.cs</span> ו-<span
+                    class="important-term server">SmsService.cs</span>. במקביל הוא מזמן את נציגי המיילים - <span
+                    class="important-term server">IEmailService.cs</span> ו-<span
+                    class="important-term server">ResendEmailService.cs</span> ששואלים את האחראים לעיצוב <span
+                    class="important-term server">EmailTemplateService.cs</span> ו-<span
+                    class="important-term server">IEmailTemplateService.cs</span> איזה תוכן טקסטואלי נחמד לשגר מה-<span
+                    class="important-term server">Templates</span> (כמו תבנית <span
+                    class="important-term server">RequestCreated.html</span> למייל יצירה או לחלופי חלופין תבנית הפלאפון
+                <span class="important-term server">ResetPassword.html</span>). עם גמר העבודות, השרת משגר אישור סופי
+                וקליל אל השוכר הממתין עדיין בהתרגשות, חזרה בדפדפן הלקוח.
+            </p>
+
+            <h4>8. מאחורי הקלעים בעולם השרת (כלי פיתוח ותחזוקה)</h4>
+            <p>ובזמן שאנחנו נרגעים, באפליקציה בולעים אוויר: יש כלי עזר מיוחדים שדואגים שמסד הנתונים לעולם לא יקרוס
+                וישתנה בצורה יעילה: תיקיית ה-<span class="important-term server">db_tools</span> המבוססת על סביבה של
+                Node.js, ולכן מחזיקה בעצמה <span class="important-term server">package.json</span> ו-<span
+                    class="important-term server">package-lock.json</span> ותלויות <span
+                    class="important-term server">node_modules</span> משלה. משם נשלפים סקריפטים כמו <span
+                    class="important-term server">read_db.js</span> מול ה- <span
+                    class="important-term server">db_dump.txt</span> שמוכן למקרה חירום. קובץ פייתון ייחודי תחת <span
+                    class="important-term server">inspect_db.py</span> מאפשר ניתוח אנליטי מהיר במקרים מורכבים במיוחד.
+                <br><br>כמו בלקוח - כדאי לזכור ששרת עצום זה נוצר תחילה באמצעות ה-<span
+                    class="important-term server">TenantRating.API.csproj</span> שדאג בקימפולו לתוצרי ביניים בתיקיות
+                ה-<span class="important-term server">obj</span> התצורה ו-<span class="important-term server">bin</span>
+                (כגון <span class="important-term server">Debug\net9.0</span> למיניהן - <span
+                    class="important-term server">project.assets.json</span>, <span
+                    class="important-term server">TenantRating.API.csproj.nuget.dgspec.json</span>, <span
+                    class="important-term server">TenantRating.API.csproj.nuget.g.props</span>, <span
+                    class="important-term server">TenantRating.API.csproj.nuget.g.targets</span>, ו-<span
+                    class="important-term server">project.nuget.cache</span>), כשמנגד עומדים המיגרציות כמעקב תדיר לעבר:
+                ה- <span class="important-term server">20260208221643_InitialCreate.cs</span>, <span
+                    class="important-term server">20260208221643_InitialCreate.Designer.cs</span> והגיבוי הכרונולוגי של
+                ה-<span class="important-term server">AppDbContextModelSnapshot.cs</span>. לאלה ולסופים הוסיפו תמיד כלי
+                תחזוקה כמו אתחול נתונים ראשוניים בעזרת עבודת כפיים ב-<span
+                    class="important-term server">DataSeeder.cs</span>, או קריאת נתוני בניית ריצה ב-<span
+                    class="important-term server">build_output.txt</span>.
+            </p>
+        </div>
+
+        <p style="text-align: center; margin-top: 50px; color: var(--secondary); font-size: 0.9em;">
+            הופק ע"י Antigravity עבור פרויקט Tenant Rating | כולל 100+ מרכיבי הארכיטקטורה.
+        </p>
+    </div>
+</body>
+
+</html>
