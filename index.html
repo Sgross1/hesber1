@@ -13,7 +13,9 @@
             --text: #0f172a;
             --border: #e2e8f0;
             --server-border: #3b82f6;
+            /* כחול */
             --client-border: #e11d48;
+            /* אדום */
         }
 
         body {
@@ -287,18 +289,30 @@
         }
 
         .function-marker {
-            background-color: #ffffca;
             padding: 0 2px;
             border-radius: 3px;
             font-weight: bold;
         }
 
+        /* רקע צהוב רק בחלק ב' */
+        #part-b .function-marker {
+            background-color: #ffffca;
+        }
+
         .function-marker.client {
-            color: #2563eb;
+            color: var(--client-border);
         }
 
         .function-marker.server {
-            color: #dc2626;
+            color: var(--server-border);
+        }
+
+        .important-term.server {
+            color: var(--server-border);
+        }
+
+        .important-term.client {
+            color: var(--client-border);
         }
     </style>
 </head>
@@ -977,12 +991,18 @@
 
         <div
             style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 30px; border: 1px solid var(--border);">
-            <p><strong>ניווט בפרק:</strong><br>
-                <a href="#part-a" style="color: var(--primary); font-weight: bold;">חלק א': תיאור הזרימה ברמת הקבצים
-                    והתיקיות</a> |
-                <a href="#part-b" style="color: var(--primary); font-weight: bold;">חלק ב': תיאור הזרימה עד לרמת
-                    הפונקציה</a>
-            </p>
+            <p style="margin-bottom: 10px;"><strong>ניווט בפרק:</strong></p>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <a href="#part-a"
+                    style="color: var(--primary); font-weight: bold; text-decoration: none; width: fit-content;">חלק א':
+                    תיאור הזרימה ברמת הקבצים והתיקיות &rarr;</a>
+                <a href="#part-b"
+                    style="color: var(--primary); font-weight: bold; text-decoration: none; width: fit-content;">חלק ב':
+                    תיאור הזרימה עד לרמת הפונקציה &rarr;</a>
+                <a href="#part-c"
+                    style="color: var(--primary); font-weight: bold; text-decoration: none; width: fit-content;">חלק ג':
+                    פירוט הפונקציות והלוגיקה &rarr;</a>
+            </div>
         </div>
 
         <h3 id="part-a">חלק א': תיאור הזרימה ברמת הקבצים והתיקיות</h3>
@@ -1180,7 +1200,7 @@
         <hr style="margin: 50px 0; border: 0; border-top: 2px dashed var(--border);">
 
         <h3 id="part-b">חלק ב': תיאור הזרימה עד לרמת הפונקציה</h3>
-        <div class="story-box" style="border-right-color: var(--primary);">
+        <div id="part-b" class="story-box" style="border-right-color: var(--primary);">
 
             <h4 id="b-1">1. כניסת המשתמש וטעינת הלקוח (Client) - עד לרמת הפונקציה
                 <a href="#a-1"
@@ -1189,17 +1209,21 @@
             </h4>
             <p>בתוך עולם ה-<span class="important-term client">TenantRating.Client</span> ותיקיית ה-<span
                     class="important-term client">src</span>, הדפדפן מריץ את קובץ ה- <span
-                    class="important-term client">main.ts</span> המפעיל את פונקציית <span
-                    class="function-marker client">bootstrapApplication()</span> אשר "מזריקה" את רכיב הבסיס לתוך ה-DOM.
+                    class="important-term client">main.ts</span> המפעיל את פונקציית <a id="b-link-bootstrapApplication"
+                    href="#c-bootstrapApplication" class="function-marker client">bootstrapApplication()</a> אשר
+                "מזריקה" את רכיב הבסיס לתוך ה-DOM.
                 פונקציה זו מאתחלת את האפליקציה תוך הזרקת תצורות מ- <span
-                    class="important-term client">app.config.ts</span>, כגון <span
-                    class="function-marker client">provideRouter(routes)</span> המגדיר את עץ הכתובות וקובע מתי לטעון
+                    class="important-term client">app.config.ts</span>, כגון <a id="b-link-provideRouter"
+                    href="#c-provideRouter" class="function-marker client">provideRouter(routes)</a> המגדיר את עץ
+                הכתובות
+                וקובע מתי לטעון
                 רכיבים בצורה מושהית (Lazy Loading). במקביל, רכיב האב <span
                     class="important-term client">app.component.ts</span> מתעורר ומקשר בין ה-HTML של ה-<span
                     class="important-term client">app.component.html</span> לבין העיצוב ב-<span
-                    class="important-term client">app.component.scss</span> דרך דקורטור ה-<span
-                    class="function-marker client">@Component</span> שמגדיר את מטא-דאטה של הרכיב. ה-<span
-                    class="important-term client">index.html</span> משמש כמארח הרשמי לכל התהליך הזה, כאשר תגית ה-root
+                    class="important-term client">app.component.scss</span> דרך דקורטור ה-<a id="b-link-Component"
+                    href="#c-Component" class="function-marker client">@Component</a> שמגדיר את מטא-דאטה של הרכיב.
+                ה-<span class="important-term client">index.html</span> משמש כמארח הרשמי לכל התהליך הזה, כאשר תגית
+                ה-root
                 מוחלפת בתוכן האפליקציה.</p>
 
             <h4 id="b-2">2. תצוגת מסך הבית ועיצוב (Client) - עד לרמת הפונקציה
@@ -1207,8 +1231,10 @@
                     style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
                     הקובץ &uarr;]</a>
             </h4>
-            <p>בתוך <span class="important-term client">home.component.ts</span>, פונקציית מחזור החיים <span
-                    class="function-marker client">ngOnInit()</span> מופעלת מיד לאחר יצירת הרכיב וטוענת משתנים גלובליים
+            <p>בתוך <span class="important-term client">home.component.ts</span>, פונקציית מחזור החיים <a
+                    id="b-link-ngOnInit" href="#c-ngOnInit" class="function-marker client">ngOnInit()</a> מופעלת מיד
+                לאחר יצירת הרכיב וטוענת
+                משתנים גלובליים
                 הדרושים ל-<span class="important-term client">home.component.html</span> ו-<span
                     class="important-term client">home.component.scss</span>. העיצוב הגלובלי מ-<span
                     class="important-term client">styles.scss</span> מוחל על כל שכבות ה-Shadow DOM, ומשאבים מתיקיית
@@ -1216,22 +1242,24 @@
                     class="important-term client">lines.png</span>, <span
                     class="important-term client">favicon.svg</span>, <span
                     class="important-term client">loginRegister.jpeg</span>) נשאבים לנתיבי ה-Static. רכיב ה- <span
-                    class="important-term client">three-cube.component.ts</span> מפעיל את <span
-                    class="function-marker client">initThreeJS()</span> המקימה את ה-"Scene", ה-"Camera" וה-"Renderer"
-                לרינדור הקוביה ב-<span class="important-term client">three-cube.component.html</span>. האנימציות ב-<span
-                    class="important-term client">wheel.component.ts</span> מופעלות תוך הצגת ה-<span
+                    class="important-term client">three-cube.component.ts</span> מפעיל את <a id="b-link-initThreeJS"
+                    href="#c-initThreeJS" class="function-marker client">initThreeJS()</a> המקימה את ה-"Scene",
+                ה-"Camera" וה-"Renderer"
+                לרינדור הקוביה ב-<span class="important-term client">three-cube.component.html</span>. האנימציות
+                ב-<span class="important-term client">wheel.component.ts</span> מופעלות תוך הצגת ה-<span
                     class="important-term client">shake.png</span> ליצירת אפקט רעידה חזותי.
                 <br><br>בתהליך ה-Build, ה-<span class="important-term client">angular.json</span>, <span
                     class="important-term client">package.json</span> ו-<span
-                    class="important-term client">tsconfig.app.json</span> קובעים את חוקי הטרנספילציה מ-TS ל-JS. ה-<span
-                    class="important-term client">.angular\cache</span> משתמש ב-<span
-                    class="important-term client">angular-compiler.db-lock</span> כדי לנעול גישה למטמון בזמן ש-<span
-                    class="important-term client">vite</span> ו-<span class="important-term client">deps_ssr</span>
+                    class="important-term client">tsconfig.app.json</span> קובעים את חוקי הטרנספילציה מ-TS ל-JS.
+                ה-<span class="important-term client">.angular\cache</span> משתמש ב-<span
+                    class="important-term client">angular-compiler.db-lock</span> כדי לנעול גישה למטמון בזמן
+                ש-<span class="important-term client">vite</span> ו-<span class="important-term client">deps_ssr</span>
                 מבצעים Bundle לקוד. התוצר הסופי ב-<span
                     class="important-term client">dist\tenant-rating-client\browser</span> (כולל ה-<span
-                    class="important-term client">main-C5ZIQ3YT.js</span> שמכיל את לוגיקת האפליקציה הדחוסה, ה-<span
-                    class="important-term client">polyfills-B6TNHZQ6.js</span> המגשר על פערי דפדפנים וה-<span
-                    class="important-term client">styles-M7RAQLMU.css</span> המכיל סלקטורים מקומפלים) נוצר בתהליך של
+                    class="important-term client">main-C5ZIQ3YT.js</span> שמכיל את לוגיקת האפליקציה הדחוסה,
+                ה-<span class="important-term client">polyfills-B6TNHZQ6.js</span> המגשר על פערי דפדפנים
+                וה-<span class="important-term client">styles-M7RAQLMU.css</span> המכיל סלקטורים מקומפלים) נוצר
+                בתהליך של
                 Minification ו-Tree Shaking.
             </p>
 
@@ -1240,12 +1268,17 @@
                     style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
                     הקובץ &uarr;]</a>
             </h4>
-            <p>בתוך <span class="important-term client">auth-modal.component.ts</span>, המשתמש מפעיל את פונקציית <span
-                    class="function-marker client">onSubmit()</span> המבצעת ולידציה ראשונית לערכי הטופס. פונקציה זו
-                קוראת ל- <span class="function-marker client">authService.login(credentials)</span> ב-<span
+            <p>בתוך <span class="important-term client">auth-modal.component.ts</span>, המשתמש מפעיל את פונקציית <a
+                    id="b-link-onSubmit" href="#c-onSubmit" class="function-marker client">onSubmit()</a> המבצעת ולידציה
+                ראשונית לערכי הטופס.
+                פונקציה זו
+                קוראת ל- <a id="b-link-authService-login" href="#c-authService-login"
+                    class="function-marker client">authService.login(credentials)</a> ב-<span
                     class="important-term client">auth.service.ts</span> שמבצעת המרה של הנתונים לפורמט JSON ושולחת בקשת
-                POST. ה- <span class="important-term client">jwt.interceptor.ts</span> מתערב דרך פונקציית <span
-                    class="function-marker client">intercept()</span> אשר משכפלת את הבקשה (Clone) ושותלת ב-Header את
+                POST. ה- <span class="important-term client">jwt.interceptor.ts</span> מתערב דרך פונקציית <a
+                    id="b-link-intercept" href="#c-intercept" class="function-marker client">intercept()</a> אשר
+                משכפלת את הבקשה (Clone)
+                ושותלת ב-Header את
                 אסימון ה-Bearer לפני שהיא נשלחת לנתיבים ב-<span
                     class="important-term client">prerendered-routes.json</span>.</p>
 
@@ -1256,36 +1289,42 @@
             </h4>
             <p>שרת ה-<span class="important-term server">TenantRating.API</span> מתחיל ב-<span
                     class="important-term server">Program.cs</span> המגדיר את ה-Middleware Pipeline. הבקשה נוחתת ב-
-                <span class="important-term server">AuthController.cs</span> במתודה <span
-                    class="function-marker server">Login()</span> המפעילה מנגנון Model Binding למיפוי ה-JSON ל-<span
-                    class="important-term server">AuthDtos.cs</span>. זו קוראת ל- <span
-                    class="function-marker server">AuthenticateUser()</span> ב-<span
+                <span class="important-term server">AuthController.cs</span> במתודה <a id="b-link-Login" href="#c-Login"
+                    class="function-marker server">Login()</a> המפעילה מנגנון Model Binding למיפוי ה-JSON ל-<span
+                    class="important-term server">AuthDtos.cs</span>. זו קוראת ל- <a id="b-link-AuthenticateUser"
+                    href="#c-AuthenticateUser" class="function-marker server">AuthenticateUser()</a> ב-<span
                     class="important-term server">AuthService.cs</span> המבצעת השוואת Hash לסיסמה. השירות פונה ל- <span
-                    class="important-term server">AppDbContext.cs</span> ומפעיל <span
-                    class="function-marker server">Users.FirstOrDefaultAsync()</span> שמייצרת פקודת SQL SELECT מול הקובץ
+                    class="important-term server">AppDbContext.cs</span> ומפעיל <a id="b-link-Users-FirstOrDefaultAsync"
+                    href="#c-Users-FirstOrDefaultAsync" class="function-marker server">Users.FirstOrDefaultAsync()</a>
+                שמייצרת פקודת SQL SELECT מול הקובץ
                 הפיזי <span class="important-term server">tenantrating_v2.db</span> כדי לחלץ את נתוני ה-<span
-                    class="important-term server">User.cs</span> מהטבלה.</p>
+                    class="important-term server">User.cs</span> מהטבלה.
+            </p>
 
             <h4 id="b-5">5. ניתוב המשתמש לאזור האישי (Client) - עד לרמת הפונקציה
                 <a href="#a-5"
                     style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
                     הקובץ &uarr;]</a>
             </h4>
-            <p>עם חזרת התשובה ל-Client, ה- <span class="important-term client">auth.guard.ts</span> מפעיל את <span
-                    class="function-marker client">canActivate()</span> הבודק אם קיים טוקן ולידי ב-LocalStorage. לאחר
-                האישור, מופעלת <span class="function-marker client">router.navigateByUrl()</span> המבצעת החלפת View
+            <p>עם חזרת התשובה ל-Client, ה- <span class="important-term client">auth.guard.ts</span> מפעיל את <a
+                    id="b-link-canActivate" href="#c-canActivate" class="function-marker client">canActivate()</a>
+                הבודק אם קיים טוקן ולידי
+                ב-LocalStorage. לאחר
+                האישור, מופעלת <a id="b-link-router-navigateByUrl" href="#c-router-navigateByUrl"
+                    class="function-marker client">router.navigateByUrl()</a> המבצעת החלפת View
                 ל-<span class="important-term client">tenant-wizard.component.ts</span> או ל-<span
-                    class="important-term client">tenant-dashboard.component.ts</span>. האחרון משתמש ב-<span
-                    class="function-marker client">getRequests()</span> מתוך <span
-                    class="important-term client">request.service.ts</span> למשיכת נתוני המשתמש. שומרי הניתוב <span
+                    class="important-term client">tenant-dashboard.component.ts</span>. האחרון משתמש ב-<a
+                    id="b-link-getRequests" href="#c-getRequests" class="function-marker client">getRequests()</a> מתוך
+                <span class="important-term client">request.service.ts</span> למשיכת נתוני המשתמש. שומרי הניתוב <span
                     class="important-term client">admin.guard.ts</span> מבצעים בדיקת Role-Based Access עבור ה-<span
                     class="important-term client">admin-dashboard.component.ts</span>. בחיפוש, ה-<span
-                    class="important-term client">landlord-search.component.ts</span> מפעיל את <span
-                    class="function-marker client">search()</span> שמבצעת פילטור נתונים מ-<span
+                    class="important-term client">landlord-search.component.ts</span> מפעיל את <a id="b-link-search"
+                    href="#c-search" class="function-marker client">search()</a> שמבצעת פילטור נתונים מ-<span
                     class="important-term client">landlord.service.ts</span> ו-<span
-                    class="important-term client">cities.service.ts</span>. איפוס סיסמא מפעיל את <span
-                    class="function-marker client">reset()</span> ב-<span
-                    class="important-term client">reset-password.component.ts</span>.</p>
+                    class="important-term client">cities.service.ts</span>. איפוס סיסמא מפעיל את <a id="b-link-reset"
+                    href="#c-reset" class="function-marker client">reset()</a> ב-<span
+                    class="important-term client">reset-password.component.ts</span>.
+            </p>
 
             <h4 id="b-6">6. יצירת בקשה חדשה והעברה לשרת (Client ל-Server) - עד לרמת הפונקציה
                 <a href="#a-6"
@@ -1293,14 +1332,18 @@
                     הקובץ &uarr;]</a>
             </h4>
             <p>המשתמש לוחץ על כפתור "נתח מסמכים" ב- <span
-                    class="important-term client">tenant-wizard.component.ts</span>, המפעיל את <span
-                    class="function-marker client">processRequest()</span> האוספת את כל ה-Inputs וקבצי ה-Blob. המידע
-                עובר ל- <span class="important-term client">request.service.ts</span> המפעיל את <span
-                    class="function-marker client">submitRequest()</span> המבצעת Multipart Upload. הבקשה נוחתת ב-<span
-                    class="important-term server">RequestsController.cs</span> (או בקונטרולרים <span
+                    class="important-term client">tenant-wizard.component.ts</span>, המפעיל את <a
+                    id="b-link-processRequest" href="#c-processRequest"
+                    class="function-marker client">processRequest()</a> האוספת את כל ה-Inputs
+                וקבצי ה-Blob. המידע
+                עובר ל- <span class="important-term client">request.service.ts</span> המפעיל את <a
+                    id="b-link-submitRequest" href="#c-submitRequest" class="function-marker client">submitRequest()</a>
+                המבצעת Multipart Upload.
+                הבקשה נוחתת ב-<span class="important-term server">RequestsController.cs</span> (או בקונטרולרים <span
                     class="important-term server">LandlordsController.cs</span> / <span
-                    class="important-term server">AdminController.cs</span>) במתודה <span
-                    class="function-marker server">SubmitRequest()</span> המבצעת "Sanitization" לנתונים שנתקבלו דרך
+                    class="important-term server">AdminController.cs</span>) במתודה <a id="b-link-SubmitRequest-Server"
+                    href="#c-SubmitRequest" class="function-marker server">SubmitRequest()</a> המבצעת "Sanitization"
+                לנתונים שנתקבלו דרך
                 ה-<span class="important-term server">RequestDtos.cs</span>.</p>
 
             <h4 id="b-7">7. שמירה במערכת והתקשרויות חוץ (פעולות Server עוקבות) - עד לרמת הפונקציה
@@ -1309,52 +1352,594 @@
                     הקובץ &uarr;]</a>
             </h4>
             <p>רצף העבודה בשרת:<br>
-                1. <span class="important-term server">OcrService.cs</span> מפעיל את <span
-                    class="function-marker server">AnalyzePayslipsAsync()</span> המשתמשת ב-AI לזיהוי שדות טקסטואליים
+                1. <span class="important-term server">OcrService.cs</span> מפעיל את <a id="b-link-AnalyzePayslipsAsync"
+                    href="#c-AnalyzePayslipsAsync" class="function-marker server">AnalyzePayslipsAsync()</a> המשתמשת
+                ב-AI לזיהוי שדות טקסטואליים
                 בתוך הקבצים הבינאריים.<br>
-                2. <span class="important-term server">ScoringService.cs</span> מריץ את <span
-                    class="function-marker server">CalculateScoreForRequest()</span> המאגדת את נתוני ה-OCR ונתוני
+                2. <span class="important-term server">ScoringService.cs</span> מריץ את <a
+                    id="b-link-CalculateScoreForRequest" href="#c-CalculateScoreForRequest"
+                    class="function-marker server">CalculateScoreForRequest()</a>
+                המאגדת את נתוני ה-OCR ונתוני
                 המשתמש.<br>
                 3. ב-<span class="important-term server">RentabilityScoreCalculator.cs</span> (תיקיית <span
-                    class="important-term server">Logic</span>), הפונקציה <span
-                    class="function-marker server">CalculateTempScore()</span> מחשבת יחס הכנסה מול הוצאה, ו-<span
-                    class="function-marker server">CalculateFinalScore()</span> מבצעת נורמליזציה של התוצאה לטווח 0-100
+                    class="important-term server">Logic</span>), הפונקציה <a id="b-link-CalculateTempScore"
+                    href="#c-CalculateTempScore" class="function-marker server">CalculateTempScore()</a> מחשבת יחס הכנסה
+                מול הוצאה, ו-<a id="b-link-CalculateFinalScore" href="#c-CalculateFinalScore"
+                    class="function-marker server">CalculateFinalScore()</a> מבצעת
+                נורמליזציה של התוצאה לטווח 0-100
                 וקובעת את ה-<span class="important-term server">RequestStatus.cs</span>.<br>
-                4. השמירה ב-DB מתבצעת דרך <span class="important-term server">AppDbContext.cs</span> בעזרת <span
-                    class="function-marker server">SaveChangesAsync()</span> שמתרגמת את השינויים ב-<span
-                    class="important-term server">Request.cs</span> ו-<span
+                4. השמירה ב-DB מתבצעת דרך <span class="important-term server">AppDbContext.cs</span> בעזרת <a
+                    id="b-link-SaveChangesAsync" href="#c-SaveChangesAsync"
+                    class="function-marker server">SaveChangesAsync()</a> שמתרגמת את השינויים
+                ב-<span class="important-term server">Request.cs</span> ו-<span
                     class="important-term server">SavedRequest.cs</span> לטרנזקציית SQL.<br>
-                5. הודעות חוץ: <span class="function-marker server">SendSmsAsync()</span> ב-<span
-                    class="important-term server">SmsService.cs</span> שולחת הודעת עדכון, ו-<span
-                    class="function-marker server">SendEmailAsync()</span> ב-<span
-                    class="important-term server">ResendEmailService.cs</span> מושכת את העיצוב דרך <span
-                    class="function-marker server">GetTemplateAsync()</span> ב-<span
+                5. הודעות חוץ: <a id="b-link-SendSmsAsync" href="#c-SendSmsAsync"
+                    class="function-marker server">SendSmsAsync()</a> ב-<span
+                    class="important-term server">SmsService.cs</span> שולחת הודעת עדכון, ו-<a
+                    id="b-link-SendEmailAsync" href="#c-SendEmailAsync"
+                    class="function-marker server">SendEmailAsync()</a> ב-<span
+                    class="important-term server">ResendEmailService.cs</span> מושכת את העיצוב דרך <a
+                    id="b-link-GetTemplateAsync" href="#c-GetTemplateAsync"
+                    class="function-marker server">GetTemplateAsync()</a> ב-<span
                     class="important-term server">EmailTemplateService.cs</span> מתוך תיקיית ה-<span
                     class="important-term server">Templates</span> (קבצי <span
                     class="important-term server">RequestCreated.html</span> ו-<span
-                    class="important-term server">ResetPassword.html</span>). ב-Client, פונקציית ה-<span
-                    class="function-marker client">subscribe()</span> מאזינה לתשובה ומעדכנת את רכיב ה-UI.</p>
+                    class="important-term server">ResetPassword.html</span>). ב-Client, פונקציית ה-<a
+                    id="b-link-subscribe" href="#c-subscribe" class="function-marker client">subscribe()</a> מאזינה
+                לתשובה ומעדכנת את רכיב
+                ה-UI.</p>
 
             <h4 id="b-8">8. מאחורי הקלעים בעולם השרת (כלי פיתוח ותחזוקה) - עד לרמת הפונקציה
                 <a href="#a-8"
                     style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
                     הקובץ &uarr;]</a>
             </h4>
-            <p>ה- <span class="important-term server">DataSeeder.cs</span> מפעיל את <span
-                    class="function-marker server">SeedAsync()</span> שבודקת אם הטבלאות ריקות ומזריקה נתוני דמו. ה-<span
-                    class="important-term server">db_tools</span> מריץ את <span
-                    class="important-term server">read_db.js</span> המפעיל את פונקציית <span
-                    class="function-marker server">fs.readFileSync()</span> לטעינת ה-<span
+            <p>ה- <span class="important-term server">DataSeeder.cs</span> מפעיל את <a id="b-link-SeedAsync"
+                    href="#c-SeedAsync" class="function-marker server">SeedAsync()</a> שבודקת אם הטבלאות ריקות ומזריקה
+                נתוני דמו. ה-<span class="important-term server">db_tools</span> מריץ את <span
+                    class="important-term server">read_db.js</span> המפעיל את פונקציית <a id="b-link-fs-readFileSync"
+                    href="#c-fs-readFileSync" class="function-marker server">fs.readFileSync()</a> לטעינת ה-<span
                     class="important-term server">db_dump.txt</span> לזיכרון. קובץ ה-<span
                     class="important-term server">inspect_db.py</span> מריץ פונקציות Pandas לניתוח סטטיסטי. תהליך
                 ה-Build ב-<span class="important-term server">TenantRating.API.csproj</span> מקמפל את ה-<span
                     class="important-term server">obj</span> וה-<span class="important-term server">bin</span> (כולל
                 ה-<span class="important-term server">project.assets.json</span> המנהל תלויות NuGet) ומתעד שגיאות
-                ב-<span class="important-term server">build_output.txt</span>. המיגרציות משתמשות ב-<span
-                    class="function-marker server">Up()</span> לשינוי הסכימה וב-<span
-                    class="function-marker server">Down()</span> לביטולו בקבצים כמו <span
+                ב-<span class="important-term server">build_output.txt</span>. המיגרציות משתמשות ב-<a id="b-link-Up"
+                    href="#c-Up" class="function-marker server">Up()</a> לשינוי הסכימה וב-<a id="b-link-Down"
+                    href="#c-Down" class="function-marker server">Down()</a> לביטולו בקבצים כמו <span
                     class="important-term server">20260208221643_InitialCreate.cs</span>, תוך סינכרון ה-<span
                     class="important-term server">AppDbContextModelSnapshot.cs</span>.</p>
+        </div>
+
+        <hr style="margin: 50px 0; border: 0; border-top: 2px dashed var(--border);">
+
+        <h2 id="part-c">חלק ג': פירוט הפונקציות והלוגיקה</h2>
+        <div class="story-box" style="background: white;">
+
+            <!-- מפת פונקציות מהירה -->
+            <div
+                style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 40px; border-right: 5px solid var(--primary);">
+                <h4
+                    style="margin-top: 0; color: var(--primary); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                    מפת הפונקציות והלוגיקה (32)</h4>
+                <p style="font-size: 0.95em;">ריכוז הפונקציות המרכזיות במדריך, מחולקות לפי שלבי הזרימה במערכת (לחץ על שם
+                    פונקציה למעבר להסבר):</p>
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; font-size: 0.85em;">
+                    <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                        <strong style="color: #64748b;">1. כניסה וטעינה</strong><br>
+                        <a href="#c-bootstrapApplication">bootstrapApplication</a>, <a
+                            href="#c-provideRouter">provideRouter</a>, <a href="#c-Component">@Component</a>
+                    </div>
+                    <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                        <strong style="color: #64748b;">2. מסך בית ועיצוב</strong><br>
+                        <a href="#c-ngOnInit">ngOnInit</a>, <a href="#c-initThreeJS">initThreeJS</a>
+                    </div>
+                    <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                        <strong style="color: #64748b;">3. אימות לקוח</strong><br>
+                        <a href="#c-onSubmit">onSubmit</a>, <a href="#c-authService-login">authService.login</a>, <a
+                            href="#c-intercept">intercept</a>
+                    </div>
+                    <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                        <strong style="color: #64748b;">4. צד שרת ואימות</strong><br>
+                        <a href="#c-Login">Login</a>, <a href="#c-AuthenticateUser">AuthenticateUser</a>, <a
+                            href="#c-Users-FirstOrDefaultAsync">Users.FirstOrDefaultAsync</a>
+                    </div>
+                    <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                        <strong style="color: #64748b;">5. ניתוב ואזור אישי</strong><br>
+                        <a href="#c-canActivate">canActivate</a>, <a
+                            href="#c-router-navigateByUrl">router.navigateByUrl</a>, <a
+                            href="#c-getRequests">getRequests</a>, <a href="#c-search">search</a>, <a
+                            href="#c-reset">reset</a>
+                    </div>
+                    <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                        <strong style="color: #64748b;">6. יצירת בקשה</strong><br>
+                        <a href="#c-processRequest">processRequest</a>, <a href="#c-submitRequest">submitRequest</a>, <a
+                            href="#c-SubmitRequest">SubmitRequest</a>
+                    </div>
+                    <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                        <strong style="color: #64748b;">7. שמירה ודירוג</strong><br>
+                        <a href="#c-AnalyzePayslipsAsync">AnalyzePayslipsAsync</a>, <a
+                            href="#c-CalculateScoreForRequest">CalculateScoreForRequest</a>, <a
+                            href="#c-CalculateTempScore">CalculateTempScore</a>, <a
+                            href="#c-CalculateFinalScore">CalculateFinalScore</a>, <a
+                            href="#c-SaveChangesAsync">SaveChangesAsync</a>, <a href="#c-SendSmsAsync">SendSmsAsync</a>,
+                        <a href="#c-SendEmailAsync">SendEmailAsync</a>, <a
+                            href="#c-GetTemplateAsync">GetTemplateAsync</a>, <a href="#c-subscribe">subscribe</a>
+                    </div>
+                    <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                        <strong style="color: #64748b;">8. תחזוקה וכלים</strong><br>
+                        <a href="#c-SeedAsync">SeedAsync</a>, <a href="#c-fs-readFileSync">fs.readFileSync</a>, <a
+                            href="#c-Up">Up</a>, <a href="#c-Down">Down</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. כניסה וטעינה -->
+            <div id="c-bootstrapApplication" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    bootstrapApplication() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> את הקומפוננטה הראשית (AppComponent) ואת הגדרות הקונפיגורציה
+                    (appConfig).</p>
+                <p><strong>מה היא עושה:</strong> זוהי נקודת ההתחלה של כל האפליקציה בדפדפן. היא "מדליקה" את Angular
+                    ומחברת את הקוד לתוך ה-HTML של הדף.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> הפונקציה יוצרת את עץ הרכיבים של Angular, מאתחלת את הזרקת התלויות
+                    (Dependency Injection), ומפעילה את המנוע שמנהל את כל מה שהמשתמש רואה.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-bootstrapApplication"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-provideRouter" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    provideRouter(routes) <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> מערך של הגדרות ניתובי כתובות (Routes).</p>
+                <p><strong>מה היא עושה:</strong> מגדירה למערכת איך לנווט בין "דפים" שונים בלי לרענן את הדפדפן (Single
+                    Page Application).</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא רושמת את כל המסלולים, בודקת מתי המשתמש שינה את הכתובת בשורת
+                    הניווט, וקובעת איזה רכיב (Component) להציג על המסך בהתאם.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-provideRouter"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <!-- 2. מסך בית ועיצוב -->
+            <div id="c-Component" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    @Component <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> אובייקט הגדרות (מטא-דאטה) הכולל נתיב ל-HTML, נתיב ל-CSS וה-Selector של
+                    הרכיב.</p>
+                <p><strong>מה היא עושה:</strong> זהו "דקורטור" שמגדיר לקלאס של TypeScript שהוא בעצם רכיב (Component) של
+                    Angular.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מחברת בין הקוד הלוגי לבין התצוגה החזותית, ומאפשרת ל-Angular
+                    לדעת איך לרנדר את הרכיב ואיפה להציב אותו בדף.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-Component"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-ngOnInit" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    ngOnInit() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> ללא פרמטרים.</p>
+                <p><strong>מה היא עושה:</strong> פונקציית מחזור חיים שמופעלת אוטומטית ברגע שהרכיב נוצר.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא משמשת בדרך כלל לטעינת נתונים ראשוניים מהשרת או להגדרת המצב
+                    ההתחלתי של המסך, לפני שהמשתמש מתחיל לבצע פעולות.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-ngOnInit"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-initThreeJS" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    initThreeJS() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> בדרך כלל אלמנט HTML (Canvas) כקלט.</p>
+                <p><strong>מה היא עושה:</strong> מאתחלת את המנוע הגרפי 3D להצגת הקובייה המפורסמת.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מקימה את ה-"עולם" (Scene), את ה-"מצלמה" (Camera) שדרכה אנחנו
+                    רואים, ואת ה-"צייר" (Renderer) שמצייר כל פריים על המסך.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-initThreeJS"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <!-- 3. אימות (Client) -->
+            <div id="c-onSubmit" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    onSubmit() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> נתוני טופס מהמשתמש.</p>
+                <p><strong>מה היא עושה:</strong> מטפלת בשליחת מידע (כמו התחברות) מהממשק לשירותים הפנימיים.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מוודאת שהנתונים שהמשתמש הזין תקינים (למשל, שהאימייל בפורמט
+                    נכון) ורק אז קוראת לפונקציית ההתחברות בשירות ה-Auth.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-onSubmit"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-authService-login" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    authService.login() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> שם משתמש וסיסמה.</p>
+                <p><strong>מה היא עושה:</strong> מבצעת את הקריאה בפועל לשרת (Login API).</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא משתמשת ב-HTTP POST כדי לשלוח את הפרטים לשרת ומחזירה
+                    "Observable" – מעין הבטחה לעדכן כשתיסגר התשובה (הצלחה או כישלון).</p>
+                <p style="margin-top: 15px;"><a href="#b-link-authService-login"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-intercept" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    intercept() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> בקשת HTTP ותחנה באה.</p>
+                <p><strong>מה היא עושה:</strong> מזריקה את אסימון האבטחה (JWT) לכל בקשה שיוצאת לשרת.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא בודקת אם יש טוקן שמור, ואם כן – היא מוסיפה אותו ל-Headers של
+                    הבקשה בצורה שקופה למפתח, כדי שהשרת ידע שהמשתמש מורשה.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-intercept"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <!-- 4. אימות (Server) -->
+            <div id="c-Login" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">Login()
+                    <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> אובייקט עם אימייל וסיסמה.</p>
+                <p><strong>מה היא עושה:</strong> הממשק (Endpoint) של השרת לקבלת בקשות התחברות.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מקבלת את הקלט מהאינטרנט, מנקה אותו משגיאות, ופונה לשירות ה-Auth
+                    לקבלת אישור סופי. בסוף היא מחזירה תשובת HTTP סטנדרטית.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-Login"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-AuthenticateUser" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    AuthenticateUser() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> פרטי התחברות (אימייל וסיסמה).</p>
+                <p><strong>מה היא עושה:</strong> מבצעת את האימות המטמתי והביטחוני של המשתמש מול מסד הנתונים.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא שולפת את המשתמש לפי האימייל, ואז משתמשת באלגוריתם HMACSHA512
+                    כדי לוודא שהסיסמה שהוזנה תואמת ל-"Hash" (הצפנה) ששמור בטבלה. אם הכל תואם, היא מייצרת JWT Token.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-AuthenticateUser"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-Users-FirstOrDefaultAsync" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    Users.FirstOrDefaultAsync() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> תנאי חיפוש (למשל: אימייל מסוים).</p>
+                <p><strong>מה היא עושה:</strong> מבצעת קריאה אסינכרונית למסד הנתונים כדי למצוא משתמש ספציפי.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> זוהי פונקציה של Entity Framework שמייצרת שאילתת SQL יעילה. היא
+                    מחזירה את המשתמש הראשון שעונה על התנאי, או "null" אם לא נמצא דבר, בלי לחסום את שאר פעולות השרת.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-Users-FirstOrDefaultAsync"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <!-- 5. ניתוב (Client) -->
+            <div id="c-canActivate" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    canActivate() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> פרטי הניתוב המבוקש.</p>
+                <p><strong>מה היא עושה:</strong> "שומר סף" שבודק אם למשתמש מותר להיכנס לדף מסוים.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא בודקת בשירות ה- <span
+                        class="important-term client">AuthService</span> אם קיים טוקן והאם המשתמש מחובר. אם לא, היא
+                    חוסמת את הגישה ומחזירה אותו לדף הבית.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-canActivate"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-getRequests" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    getRequests() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> ללא פרמטרים (משתמשת במזהה המשתמש מהטוקן).</p>
+                <p><strong>מה היא עושה:</strong> מושכת את רשימת הבקשות הקיימות של המשתמש מהשרת.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מבצעת בקשת GET ל-API ומעדכנת את רכיב ה-Dashboard בנתונים שחזרו,
+                    כדי שהמשתמש יוכל לראות את ההיסטוריה והסטטוסים שלו.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-getRequests"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-search" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">search()
+                    <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> פרמטרי חיפוש (עיר, טווח מחירים).</p>
+                <p><strong>מה היא עושה:</strong> מבצעת חיפוש של דיירים פוטנציאליים לפי הקריטריונים של בעל הדירה.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא פונה לשירות ה- <span
+                        class="important-term client">LandlordService</span>, מסננת את התוצאות ומציגה אותן בטבלה
+                    אינטראקטיבית.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-search"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-reset" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">reset()
+                    <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> סיסמה חדשה וטוקן אימות.</p>
+                <p><strong>מה היא עושה:</strong> משלימה את תהליך איפוס הסיסמה של המשתמש.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מוודאת שהסיסמה החדשה תקינה ושולחת אותה לשרת יחד עם הטוקן שהתקבל
+                    במייל, כדי לעדכן את מסד הנתונים.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-reset"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-router-navigateByUrl" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    router.navigateByUrl() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> כתובת (URL) יעד.</p>
+                <p><strong>מה היא עושה:</strong> מעבירה את המשתמש לדף אחר באפליקציה באופן תכנותי.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מעדכנת את שורת הכתובת בדפדפן ומורה ל-Angular להחליף את
+                    הקומפוננטה המוצגת על המסך בקומפוננטה שמשוייכת לכתובת החדשה.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-router-navigateByUrl"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <!-- 6. יצירת בקשה -->
+            <div id="c-processRequest" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    processRequest() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> פרטי בקשה וקבצים שהועלו (תלושי שכר).</p>
+                <p><strong>מה היא עושה:</strong> אוספת את כל המידע מהאשף (Wizard) ומכינה אותו לשליחה לשרת.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מבצעת ולידציה סופית על כמות הקבצים ותקינות מספרי הזהות, ואז
+                    משתמשת בשירות ה-Requests כדי להתחיל את תהליך ההעלאה.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-processRequest"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-submitRequest" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    submitRequest() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> FormData המכיל קבצים ונתונים טקסטואליים.</p>
+                <p><strong>מה היא עושה:</strong> מבצעת את משלוח הבקשה המורכבת (Multipart Upload) לשרת.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא משדרת את הקבצים והנתונים בבת אחת, תומכת במעקב אחרי התקדמות
+                    ההעלאה, ומחכה לקבל חזרה את הציון והתוצאות מהשרת.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-submitRequest"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-SubmitRequest" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    SubmitRequest() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> רשימת קבצים ונתוני בקשה בפורמט Multipart.</p>
+                <p><strong>מה היא עושה:</strong> ה-Endpoint בשרת שקולט את יצירת הבקשה החדשה.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא שומרת זמנית את הקבצים, מוודאת שהמשתמש מחובר, ומתחילה את שרשרת
+                    הפעולות הכבדה: OCR, חישוב ציון ושליחת הודעות.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-SubmitRequest-Server"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-AnalyzePayslipsAsync" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    AnalyzePayslipsAsync() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> קבצי תלושי שכר (PDF או תמונה).</p>
+                <p><strong>מה היא עושה:</strong> משתמשת בבינה מלאכותית (Azure AI) כדי "לקרוא" את הנתונים מהמסמכים.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא שולחת את הקבצים לענן, מנתחת את התוצאות ומחלצת נתונים כמו שכר
+                    נטו, מספר ילדים, ותק ופנסיה מבלי שהמשתמש יצטרך להקליד אותם.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-AnalyzePayslipsAsync"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <!-- 7. שמירה ודירוג -->
+            <div id="c-CalculateScoreForRequest" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    CalculateScoreForRequest() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> נתוני משתמש ונתונים שחולצו מה-OCR.</p>
+                <p><strong>מה היא עושה:</strong> פונקציית ה-"תזמור" שמנהלת את כל תהליך חישוב הציון.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא מאגדת את כל המידע הפיננסי מכל התלושים, מחשבת ממוצעים, ושולחת
+                    אותם למחשבון הדירוג כדי לקבל תוצאה סופית המבוססת על כלל הפרמטרים.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-CalculateScoreForRequest"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-CalculateTempScore" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    CalculateTempScore() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> הכנסה פנויה מול שכר דירה מבוקש.</p>
+                <p><strong>מה היא עושה:</strong> מבצעת חישוב ראשוני של "יחס העמידה" במטלה הכלכלית.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא בודקת כמה אחוז משכר הנטו המטופל (לאחר ניכויים ודילולים
+                    דמוגרפיים) נשאר לשוכר לאחר תשלום שכר הדירה. זהו הבסיס לדירוג האשראי של השוכר.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-CalculateTempScore"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-CalculateFinalScore" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    CalculateFinalScore() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> ציון זמני ופרמטרים של יציבות (וותק, פנסיה).</p>
+                <p><strong>מה היא עושה:</strong> הופכת את הציון הגולמי לציון סופי בטווח של 0-100 (או 0-1000 בתצוגה).</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא משקללת "בונוסים" על יציבות תעסוקתית והפרשות לפנסיה, ומבצעת
+                    נורמליזציה כדי שהציון יהיה השוואתי וקל להבנה עבור בעל הדירה.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-CalculateFinalScore"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-SaveChangesAsync" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    SaveChangesAsync() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> ללא פרמטרים (עובדת על זיכרון ה-Context).</p>
+                <p><strong>מה היא עושה:</strong> "כפתור השמירה" הסופי של השרת מול מסד הנתונים.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא לוקחת את כל השינויים שקרו בזיכרון (כמו יצירת בקשה חדשה או עדכון
+                    משתמש) וכותבת אותם פיזית לקובץ ה-SQLite בבת אחת, תוך שמירה על שלמות הנתונים.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-SaveChangesAsync"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <!-- 8. תקשורת ועדכון -->
+            <div id="c-SendSmsAsync" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    SendSmsAsync() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> מספר טלפון ותוכן ההודעה.</p>
+                <p><strong>מה היא עושה:</strong> שולחת הודעת SMS למובייל של המשתמש דרך ספק חיצוני.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא בונה בקשת HTTP לספק ה-SMS (כמו Sms4Free), מוודאת שההודעה נשלחה
+                    בהצלחה ומעדכנת את השרת שהלקוח קיבל התראה.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-SendSmsAsync"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-SendEmailAsync" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    SendEmailAsync() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> כתובת אימייל, נושא וגוף ההודעה.</p>
+                <p><strong>מה היא עושה:</strong> שולחת אימייל מעוצב (כמו אישור בקשה או איפוס סיסמה) דרך שירות Resend.
+                </p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא משתמשת ב-API של Resend כדי לשגר את המכתב, ומנהלת את הלוגיקה של
+                    ווידוא הצלחת המשלוח בצורה אסינכרונית.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-SendEmailAsync"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-GetTemplateAsync" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    GetTemplateAsync() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> שם התבנית (למשל: "RequestCreated").</p>
+                <p><strong>מה היא עושה:</strong> טוענת את קובץ ה-HTML של האימייל מהדיסק ושותלת בו נתונים דינמיים.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא קוראת את הקובץ הפיזי, מחליפה "מילות קוד" (כמו {UserName}) במידע
+                    אמיתי, ומחזירה טקסט HTML מוכן למשלוח.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-GetTemplateAsync"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-subscribe" class="function-detail client" style="margin-bottom: 25px;">
+                <h4 style="color: var(--client-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    subscribe() <span class="tag"
+                        style="background: var(--client-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Client</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> פונקציית טיפול (Callback).</p>
+                <p><strong>מה היא עושה:</strong> "נרשמת" לקבלת עדכון כשפעולה אסינכרונית (כמו קריאת API) מסתיימת.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> במקום לחכות ולעצור את הכל, ה-Client ממשיך לעבוד. כשהתשובה חוזרת
+                    מהשרת, הפונקציה הזו "מתעוררת" ומבצעת את הפעולה שהגדרנו (למשל, הצגת הודעת הצלחה).</p>
+                <p style="margin-top: 15px;"><a href="#b-link-subscribe"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <!-- 9. תחזוקה וכלים -->
+            <div id="c-SeedAsync" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    SeedAsync() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> ללא פרמטרים.</p>
+                <p><strong>מה היא עושה:</strong> ממלאת את מסד הנתונים בנתונים ראשוניים אם הוא ריק (כמו משתמש מנהל).</p>
+                <p><strong>הסבר על הלוגיקה:</strong> היא בודקת אם יש משתמשים במערכת. אם לא, היא מייצרת משתמש ברירת מחדל
+                    עם סיסמה מוצפנת, כדי שהמערכת תהיה מוכנה לעבודה מיד לאחר ההתקנה.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-SeedAsync"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-fs-readFileSync" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                    fs.readFileSync() <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> נתיב לקובץ (כמו <span
+                        class="important-term server">db_dump.txt</span>).</p>
+                <p><strong>מה היא עושה:</strong> קוראת את כל התוכן של קובץ טקסט לתוך משתנה בזיכרון בצורה סינכרונית.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> זוהי פונקציה של ה-OS (דרך Node.js בסקריפטים של הטרמינל) שמאפשרת
+                    לטעון מידע גולמי ולעבד אותו, למשל לצורך ייצוא או ייבוא נתונים.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-fs-readFileSync"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-Up" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">Up()
+                    <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> בנאי מסד נתונים (MigrationBuilder).</p>
+                <p><strong>מה היא עושה:</strong> מגדירה איך לשדרג את מבנה מסד הנתונים (הוספת טבלאות/עמודות).</p>
+                <p><strong>הסבר על הלוגיקה:</strong> כאשר אנחנו מוסיפים תכונה חדשה לקוד, הפונקציה הזו מייצרת את פקודות
+                    ה-SQL הדרושות כדי לעדכן את הטבלאות הפיזיות מבלי למחוק את המידע הקיים.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-Up"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
+
+            <div id="c-Down" class="function-detail server" style="margin-bottom: 25px;">
+                <h4 style="color: var(--server-border); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">Down()
+                    <span class="tag"
+                        style="background: var(--server-border); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; vertical-align: middle;">Server</span>
+                </h4>
+                <p><strong>מה היא מקבלת:</strong> בנאי מסד נתונים (MigrationBuilder).</p>
+                <p><strong>מה היא עושה:</strong> מגדירה איך לבטל (Rollback) שינויים שבוצעו במבנה מסד הנתונים.</p>
+                <p><strong>הסבר על הלוגיקה:</strong> זוהי הדרך שלנו "לחזור אחורה במזמן". אם גילינו שעדכון הסכימה היה
+                    שגוי, הפונקציה הזו יודעת למחוק את הטבלאות או העמודות שנוספו ולהחזיר את המצב לקדמותו.</p>
+                <p style="margin-top: 15px;"><a href="#b-link-Down"
+                        style="font-size: 0.85em; color: var(--secondary); text-decoration: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px;">חזור
+                        לזרימה &crarr;</a></p>
+            </div>
         </div>
 
 
