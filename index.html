@@ -217,20 +217,20 @@
             font-size: 10.5px;
         }
 
-        ul.glossary-list {
+        .glossary-list {
             padding-right: 20px;
         }
 
-        ul.glossary-list>li {
+        .glossary-list>li {
             margin-bottom: 20px;
             font-size: 1.05em;
         }
 
-        ul.glossary-list>li>strong {
+        .glossary-list>li>strong {
             color: #0f172a;
         }
 
-        ol.glossary-impl {
+        .glossary-impl {
             margin-right: 25px;
             margin-top: 8px;
             color: #334155;
@@ -239,8 +239,13 @@
             padding: 10px 35px 10px 10px;
         }
 
-        ol.glossary-impl li {
+        .glossary-impl li {
             margin-bottom: 4px;
+        }
+
+        .story-box {
+            padding: 20px;
+            border-right: 4px solid var(--secondary);
         }
 
         .page-break {
@@ -279,6 +284,21 @@
             .folder-tree summary::-webkit-details-marker {
                 display: none;
             }
+        }
+
+        .function-marker {
+            background-color: #ffffca;
+            padding: 0 2px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .function-marker.client {
+            color: #2563eb;
+        }
+
+        .function-marker.server {
+            color: #dc2626;
         }
     </style>
 </head>
@@ -558,10 +578,30 @@
                                                                 </li>
                                                                 <li>
                                                                     <details open>
-                                                                        <summary class="folder">tenant\wizard</summary>
+                                                                        <summary class="folder">tenant</summary>
                                                                         <ul>
-                                                                            <li class="file">
-                                                                                tenant-dashboard.component.ts</li>
+                                                                            <li>
+                                                                                <details open>
+                                                                                    <summary class="folder">
+                                                                                        tenant-dashboard</summary>
+                                                                                    <ul>
+                                                                                        <li class="file">
+                                                                                            tenant-dashboard.component.ts
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </details>
+                                                                            </li>
+                                                                            <li>
+                                                                                <details open>
+                                                                                    <summary class="folder">wizard
+                                                                                    </summary>
+                                                                                    <ul>
+                                                                                        <li class="file">
+                                                                                            tenant-wizard.component.ts
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </details>
+                                                                            </li>
                                                                         </ul>
                                                                     </details>
                                                                 </li>
@@ -725,69 +765,6 @@
                     </tr>
                 </tbody>
             </table>
-
-            <!-- עיצוב רשימה מקורי (גיבוי)
-            <ul class="glossary-list">
-                <li><strong>Controller (בקר):</strong> "המדריך הרשמי" של השרת. מקבל את הבקשות מצד הלקוח, מנתב אותן למקום
-                    המתאים להמשך טיפול, ומחזיר את התשובה.
-                    <ol class="glossary-impl">
-                        <li><span class="important-term server">AdminController.cs</span> (לאזור מנהלים).</li>
-                        <li><span class="important-term server">AuthController.cs</span> (לניהול כניסת משתמשים ואימות).
-                        </li>
-                        <li><span class="important-term server">LandlordsController.cs</span> (לניהול בקשות בעלי דירות).
-                        </li>
-                        <li><span class="important-term server">RequestsController.cs</span> (לקבלת וניהול בקשות
-                            שוכרים).
-                        </li>
-                    </ol>
-                </li>
-                <li><strong>Service (שירות עסקי):</strong> "המוח" של המערכת. ה-Controllers שולחים לכאן נתונים,
-                    וה-Service מכיל את הלוגיקה העסקית והחישובים.
-                    <ol class="glossary-impl">
-                        <li><span class="important-term server">AuthService.cs</span> (לוגיקת אימות).</li>
-                        <li><span class="important-term server">EmailTemplateService.cs</span> ו-<span
-                                class="important-term server">IEmailTemplateService.cs</span>.</li>
-                        <li><span class="important-term server">ResendEmailService.cs</span> ו-<span
-                                class="important-term server">IEmailService.cs</span> (לשליחת מיילים).</li>
-                        <li><span class="important-term server">OcrService.cs</span> ו-<span
-                                class="important-term server">IOcrService.cs</span> (למשיכת טקסט מת.ז).</li>
-                        <li><span class="important-term server">SmsService.cs</span> ו-<span
-                                class="important-term server">ISmsService.cs</span> (לשליחת הודעות).</li>
-                        <li><span class="important-term server">ScoringService.cs</span> (חישוב ומנהל דירוג).</li>
-                    </ol>
-                </li>
-                <li><strong>Model / Entity (מודל או ישות):</strong> ייצוג מחשובי של אובייקט מהעולם האמיתי המקביל לרוב
-                    לטבלה במסד הנתונים.
-                    <ol class="glossary-impl">
-                        <li><span class="important-term server">Request.cs</span> (בקשה).</li>
-                        <li><span class="important-term server">RequestStatus.cs</span> (סטטוס בקשה).</li>
-                        <li><span class="important-term server">SavedRequest.cs</span> (בקשה היסטורית שמורה).</li>
-                        <li><span class="important-term server">User.cs</span> (משתמש מערכת).</li>
-                    </ol>
-                </li>
-                <li><strong>DTO (Data Transfer Object):</strong> פילטר לתעבורת רשת. אובייקט "רזה" להעברת מידע בין
-                    הצדדים, ללא חשיפת מידע רגיש מה-Entity המלא.
-                    <ol class="glossary-impl">
-                        <li>האובייקטים מרוכזים בקבצי <span class="important-term server">AuthDtos.cs</span> ו-<span
-                                class="important-term server">RequestDtos.cs</span>.</li>
-                    </ol>
-                </li>
-                <li><strong>ORM / DbContext (כמו Entity Framework):</strong> "המתורגמן" למסד הנתונים. מאפשר לתקשר עם
-                    המסד דרך קוד ב-C# ללא כתיבת שאילתות SQL.
-                    <ol class="glossary-impl">
-                        <li><span class="important-term server">AppDbContext.cs</span> משמש כגשר המרכזי לתקשורת מול מסד
-                            הנתונים.</li>
-                    </ol>
-                </li>
-                <li><strong>Migration (מיגרציה):</strong> מנגנון לעדכון מסודר של מבנה מסד הנתונים בכל פעם שיש שינוי
-                    במודלים (Entities).
-                    <ol class="glossary-impl">
-                        <li>בקובץ <span class="important-term server">20260208221643_InitialCreate.cs</span> מוגדרת
-                            המיגרציה הראשונית של הפרויקט.</li>
-                    </ol>
-                </li>
-            </ul>
-            -->
         </div>
 
         <div class="client-block">
@@ -816,6 +793,7 @@
                                 <li><span class="important-term client">landlord-search.component.ts/.html/.scss</span>
                                 </li>
                                 <li><span class="important-term client">tenant-dashboard.component.ts</span></li>
+                                <li><span class="important-term client">tenant-wizard.component.ts</span></li>
                                 <li><span class="important-term client">auth-modal.component.ts/.html/.scss</span></li>
                                 <li><span class="important-term client">three-cube.component.ts/.html/.scss</span></li>
                                 <li><span class="important-term client">wheel.component.ts</span></li>
@@ -847,7 +825,7 @@
                     <tr>
                         <td>4</td>
                         <td><strong>Interceptor (מיירט)</strong></td>
-                        <td>תחנת מעבר אוטומטית ש"תופסת" בקשות HTTP ומשנה אותן לפני יציאתן מחוץ ללקוח.</td>
+                        <td>תחנת מעבר אוטומטית ש\"תופסת\" בקשות HTTP ומשנה אותן לפני יציאתן מחוץ ללקוח.</td>
                         <td><span class="important-term client">jwt.interceptor.ts</span> (הזרקת Token).</td>
                     </tr>
                     <tr>
@@ -859,67 +837,10 @@
                     </tr>
                 </tbody>
             </table>
-
-            <!-- עיצוב רשימה מקורי (גיבוי)
-            <ul class="glossary-list">
-                <li><strong>Component (רכיב / קומפוננטה):</strong> אבן הבניין של הממשק. מחלקת כל מסך לחתיכות קטנות
-                    עצמאיות הכוללות תבנית HTML, SCSS וקוד TS.
-                    <ol class="glossary-impl">
-                        <li><span class="important-term client">admin-dashboard.component.ts</span> (מסך הנהלה).</li>
-                        <li><span class="important-term client">reset-password.component.ts</span> (איפוס סיסמא).</li>
-                        <li><span class="important-term client">home.component.ts/.html/.scss</span> (מסך הבית).</li>
-                        <li><span class="important-term client">landlord-search.component.ts/.html/.scss</span> (חיפוש
-                            לבעלי דירות).</li>
-                        <li><span class="important-term client">tenant-dashboard.component.ts</span> (מסך השוכר הדייר).
-                        </li>
-                        <li><span class="important-term client">auth-modal.component.ts/.html/.scss</span> (חלונית
-                            ההתחברות).</li>
-                        <li><span class="important-term client">three-cube.component.ts/.html/.scss</span> (הקוביה התלת
-                            מימדית).</li>
-                        <li><span class="important-term client">wheel.component.ts</span> (גלגל בבית).</li>
-                        <li><span class="important-term client">app.component.ts/.html/.scss</span> (קומפוננטת האב
-                            המחזיקה הכל).</li>
-                    </ol>
-                </li>
-                <li><strong>Service (שירות צד לקוח):</strong> שירות האחראי על פעולות חוצות-קומפוננטות כמו קריאות API מול
-                    השרת (לקבלת נתונים).
-                    <ol class="glossary-impl">
-                        <li><span class="important-term client">admin.service.ts</span> (תקשורת מנהלים).</li>
-                        <li><span class="important-term client">auth.service.ts</span> (אימות מול השרת).</li>
-                        <li><span class="important-term client">cities.service.ts</span> (שירות חיצוני למשיכת רשימת
-                            ערים).</li>
-                        <li><span class="important-term client">landlord.service.ts</span> (תקשורת בחיפוש משכירים).</li>
-                        <li><span class="important-term client">request.service.ts</span> (לניהול סטטוסי הבקשות).</li>
-                    </ol>
-                </li>
-                <li><strong>Guard (שומר ניתוב):</strong> פונקציית ביקורת שמופעלת לפני הניתוב לעמוד מסוים כדי לבדוק האם
-                    ההרשאה חוקית כרגע.
-                    <ol class="glossary-impl">
-                        <li><span class="important-term client">auth.guard.ts</span> לאימות משתמש, ו- <span
-                                class="important-term client">admin.guard.ts</span> לחסימת אזור לפרטי מנהל בלבד.</li>
-                    </ol>
-                </li>
-                <li><strong>Interceptor (מיירט בקשות):</strong> תחנת מעבר אוטומטית ש"תופסת" בקשות HTTP ומשנה אותן לפני
-                    יציאתן מחוץ ללקוח.
-                    <ol class="glossary-impl">
-                        <li><span class="important-term client">jwt.interceptor.ts</span> אחראק לשתול אסימוני אבטחה
-                            בבקשת API יוצאת.</li>
-                    </ol>
-                </li>
-                <li><strong>Module / Chunk (קיטוע קוד עצמאי):</strong> טעינה הדרגתית, טכניקה (Lazy Loading) ההופכת את
-                    הקוד לנתחים שנטענים בזמן אמת ולא כגוש כבד.
-                    <ol class="glossary-impl">
-                        <li>קבצי צד הלקוח שנאגרים לחתיכות מפוזרות נמצאים תחת תיקיית ה-dist תחת השמות: <span
-                                class="important-term client">chunk-J277PXRZ.js</span>, <span
-                                class="important-term client">chunk-XERIVZKL.js</span>.</li>
-                    </ol>
-                </li>
-            </ul>
-            -->
         </div>
 
 
-        <div class="story-box page-break" style="padding: 20px; border-right: 4px solid var(--secondary);">
+        <div class="story-box page-break">
             <h3>2. עקרונות וטכניקות Full-Stack (הארכיטקטורה שמאחורי הקלעים)</h3>
 
             <table class="glossary-table">
@@ -1025,13 +946,13 @@
                     <tr>
                         <td>8</td>
                         <td><strong>Cross Cutting Concerns</strong><br>(נושאים חוצי מערכת)</td>
-                        <td>פונקציונליות שחוצה את כל המערכת (Logging, Security, DB Access) ומוזרקת כשירותים גלובליים.
+                        <td>פונקציית ביקורת שחוצה את כל המערכת (Logging, Security, DB Access) ומוזרקת כשירותים גלובליים.
                         </td>
                         <td>JWT Interceptor, DbContext, Email/SMS Services.</td>
                     </tr>
                     <tr>
                         <td>9</td>
-                        <td><strong>Build Artifact Architecture</strong><br>(ארכיטקטורת תוצרי בניה)</td>
+                        <td><strong>Build Artifact Architecture</strong><br>(ארכיטקטורה תוצרי בניה)</td>
                         <td>תהליך קומפילציה שבו קוד המקור הופך לתוצרי ריצה (Artifacts) שלא מורצים ישירות.</td>
                         <td>
                             <strong>Client:</strong> <span class="important-term client">angular.json</span> &rarr;
@@ -1050,141 +971,28 @@
                     APIs).
                 </p>
             </div>
-
-            <!-- עיצוב מקורי (גיבוי)
-            <div class="server-block">
-                <h4>🟢 צד השרת (ASP.NET Core): הקפדה על סדר</h4>
-
-                <ul class="glossary-list">
-                    <li><span class="important-term server">AuthController</span> &rarr; <span
-                            class="important-term server">AuthService</span></li>
-                    <li><span class="important-term server">RequestsController</span> &rarr; <span
-                            class="important-term server">ScoringService</span> / <span
-                            class="important-term server">IOcrService</span></li>
-                    <li><span class="important-term server">LandlordsController</span> &rarr; <span
-                            class="important-term server">LandlordService</span></li>
-                    <li><span class="important-term server">AdminController</span> &rarr; <span
-                            class="important-term server">AdminService</span></li>
-                </ul>
-                <p>בכל המקומות האלה המערכת פועלת לפי עקרון <strong>Thin Controller / Fat Service Pattern</strong>:</p>
-                <ul style="list-style-type: none;">
-                    <li>🔹 ה-Controller לא מבצע לוגיקה עסקית — הוא רק מתווך (מקבל DTO, קורא ל-Service, מחזיר תשובה).
-                    </li>
-                    <li>🔹 ה-Service מבצע את העבודה האמיתית (מפעיל לוגיקה, מתקשר עם ה-DB, מפעיל שירותים נוספים
-                        ואלגוריתמים).</li>
-                </ul>
-            </div>
-
-            <div class="client-block">
-                <h4>🟢 צד הלקוח (Angular): שיקוף של עקרונות השרת</h4>
-                <p>אותו עיקרון חוזר שוב בדיוק גבוה:</p>
-                <ul class="glossary-list">
-                    <li><span class="important-term client">auth.component</span> &rarr; <span
-                            class="important-term client">auth.service</span></li>
-                    <li><span class="important-term client">tenant-dashboard</span> &rarr; <span
-                            class="important-term client">request.service</span></li>
-                    <li><span class="important-term client">landlord-search</span> &rarr; <span
-                            class="important-term client">landlord.service</span></li>
-                    <li><span class="important-term client">admin-dashboard</span> &rarr; <span
-                            class="important-term client">admin.service</span></li>
-                </ul>
-                <ul style="list-style-type: none;">
-                    <li>🔹 ה-Component לא מדבר ישירות עם ה-Network ולא מכיל לוגיקה עסקית מורכבת.</li>
-                    <li>🔹 הכל עובר דרך ה-Service — בדיוק כמו בשרת.</li>
-                </ul>
-            </div>
-
-            <h4>🔁 Dependency Injection + Abstraction דרך Interfaces</h4>
-            <p>עקרון שחוזר חזק (Dependency Inversion Principle מתוך SOLID): אתה עיבוד מול <strong>Interface</strong> ולא
-                מול מימוש ישיר.</p>
-            <ul class="glossary-list">
-                <li><span class="important-term server">IOcrService</span> &rarr; <span
-                        class="important-term server">OcrService</span></li>
-                <li><span class="important-term server">ISmsService</span> &rarr; <span
-                        class="important-term server">SmsService</span></li>
-                <li><span class="important-term server">IEmailService</span> &rarr; <span
-                        class="important-term server">ResendEmailService</span></li>
-            </ul>
-            <p>זה מאפשר <strong>Plug & Replace Architecture</strong>: אפשר להחליף מנגנון מייל או OCR בלי לשנות שורה אחת
-                ב-Controller.</p>
-
-            <h4>🔁 Z = Flow אחיד של בקשה (Pipeline Pattern)</h4>
-            <p>כל בקשה במערכת עוברת רצף קבוע של <strong>Layered Architecture</strong>:</p>
-            <div
-                style="background: #f8fafc; padding: 15px; border-radius: 5px; font-family: monospace; margin-bottom: 20px;">
-                <p><strong>ב-Login:</strong><br>
-                    Client &rarr; Controller &rarr; Service &rarr; DbContext &rarr; Service &rarr; Controller &rarr;
-                    Client</p>
-
-                <p><strong>ב-Create Request:</strong><br>
-                    Client &rarr; Controller &rarr; OCR &rarr; Scoring &rarr; DbContext &rarr; SMS/Email &rarr; Client
-                </p>
-
-                <p><strong>בכל פעולה אחרת:</strong><br>
-                    Client &rarr; Controller &rarr; Service &rarr; DbContext &rarr; Client</p>
-            </div>
-            <p
-                style="text-align: center; font-family: monospace; background: #f1f5f9; padding: 10px; border-radius: 5px;">
-                HTTP &rarr; Controller &rarr; Service &rarr; Logic &rarr; Data &rarr; External &rarr; Response
-            </p>
-
-            <h4>🔁 DTO Boundary: הגנה על הנתונים</h4>
-            <p>שימוש ב-<span class="important-term server">AuthDtos.cs</span> ו-<span
-                    class="important-term server">RequestDtos.cs</span> יוצר <strong>Anti-Corruption Layer</strong>. אתה
-                לא מעביר ישויות DB ישירות ללקוח, מה שמונע חשיפת נתונים רגישים ומנתק את התלות בין ה-Database ל-Frontend.
-            </p>
-
-            <h4>🔁 Guard & Gatekeeper Pattern</h4>
-            <p>שכבת ה-Authorization חוזרת בשני הצדדים: ב-Angular דרך <span
-                    class="important-term client">auth.guard.ts</span> ו-<span
-                    class="important-term client">admin.guard.ts</span>, ובשרת דרך JWT ו-Interceptors. זוהי שכבת בדיקה
-                קריטית לפני כל פעולה.</p>
-
-            <h4>🔁 Orchestration Pattern: המנצח על התזמורת</h4>
-            <div style="border-right: 2px solid var(--border); padding-right: 15px; margin-bottom: 15px;">
-                <p><strong>ב-Create Request:</strong> מי מנהל את כל התהליך?</p>
-                <ul style="list-style-type: none; margin-bottom: 10px;">
-                    <li>❌ לא ה-Controller</li>
-                    <li>❌ לא ה-OCR</li>
-                    <li>❌ לא ה-Scoring</li>
-                </ul>
-                <p>אלא: <strong>ScoringService</strong>. הוא זה שמפעיל ומסנכרן את כולם:</p>
-                <ul style="list-style-type: square; margin-right: 20px;">
-                    <li>ממשק OCR לעיבוד מסמכים</li>
-                    <li>אלגוריתם דירוג לחישוב התוצאה</li>
-                    <li>שמירה ב-Database</li>
-                    <li>שליחת הודעות ומיילים</li>
-                </ul>
-                <p>זה נקרא: <strong>➜ Application Service / Orchestrator Pattern</strong>. הוא לא מבצע הכל בעצמו, אבל
-                    הוא "מתזמן" את כל המערכת.</p>
-            </div>
-
-            <h4>🔁 Cross Cutting Concerns</h4>
-            <p>דברים שחוצים את כל המערכת כמו Logging, Security (JWT), ושירותי הודעות גלובליים, ממומשים
-                כ-<strong>Middleware</strong> או כשירותים מוזרקים (DI) שזמינים בכל מקום.</p>
-
-            <h4>🔁 Build Pipeline: תהליך יצירת תוצרים</h4>
-            <p>גם בלקוח (<span class="important-term client">angular.json</span> &rarr; <span
-                    class="important-term client">dist</span>) וגם בשרת (<span
-                    class="important-term server">csproj</span> &rarr; <span
-                    class="important-term server">bin/obj</span>), המערכת לא מריצה קוד מקור ישירות אלא עוברת שלב
-                קומפילציה המייצר <strong>Build Artifacts</strong>.</p>
-
-            <div
-                style="background: #eff6ff; padding: 15px; border-radius: 8px; margin-top: 25px; border-right: 4px solid var(--primary);">
-                <p><strong>🧠 לסיכום:</strong> למרות שלא נכתב במפורש, המערכת בנויה בגרסה פרקטית של <strong>Clean
-                        Architecture</strong> הכוללת שלוש שכבות ברורות: <strong>Presentation</strong> (Angular),
-                    <strong>Application</strong> (Services), ו-<strong>Infrastructure</strong> (DbContext / APIs
-                    חיצוניים).
-                </p>
-            </div>
-            -->
         </div>
 
         <h2>3. סיפור הזרימה: המסע השלם של בקשה במערכת</h2>
+
+        <div
+            style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 30px; border: 1px solid var(--border);">
+            <p><strong>ניווט בפרק:</strong><br>
+                <a href="#part-a" style="color: var(--primary); font-weight: bold;">חלק א': תיאור הזרימה ברמת הקבצים
+                    והתיקיות</a> |
+                <a href="#part-b" style="color: var(--primary); font-weight: bold;">חלק ב': תיאור הזרימה עד לרמת
+                    הפונקציה</a>
+            </p>
+        </div>
+
+        <h3 id="part-a">חלק א': תיאור הזרימה ברמת הקבצים והתיקיות</h3>
         <div class="story-box">
 
-            <h4>1. כניסת המשתמש וטעינת הלקוח (Client)</h4>
+            <h4 id="a-1">1. כניסת המשתמש וטעינת הלקוח (Client)
+                <a href="#b-1"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[קפוץ לרמת
+                    הפונקציה &darr;]</a>
+            </h4>
             <p>הכל מתחיל בעולם של <span class="important-term client">TenantRating.Client</span>. כאשר משתמש נכנס
                 למערכת, הדפדפן טוען את קובץ ה-<span class="important-term client">index.html</span> (שנמצא תחת <span
                     class="important-term client">src</span>). מאחורי הקלעים, Angular מתעורר דרך ה-<span
@@ -1193,9 +1001,12 @@
                     class="important-term client">app.component.html</span>, ה-<span
                     class="important-term client">app.component.scss</span> והלוגיקה ב-<span
                     class="important-term client">app.component.ts</span>.</p>
-            <img src="PIC/3.1.jpg" class="doc-image" alt="Client Loading Visual">
 
-            <h4>2. תצוגת מסך הבית ועיצוב (Client)</h4>
+            <h4 id="a-2">2. תצוגת מסך הבית ועיצוב (Client)
+                <a href="#b-2"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[קפוץ לרמת
+                    הפונקציה &darr;]</a>
+            </h4>
             <p>הדפדפן מציג למשתמש את ה-<span class="important-term client">home.component.html</span> ומפעיל את ה-<span
                     class="important-term client">home.component.ts</span>. העיצוב הגלובלי נשאב מ-<span
                     class="important-term client">styles.scss</span> יחד עם תמונות ואייקונים מה-<span
@@ -1207,9 +1018,8 @@
                     class="important-term client">three-cube.component.ts</span>, <span
                     class="important-term client">three-cube.component.html</span> ו-<span
                     class="important-term client">three-cube.component.scss</span>, ואנימציות מ-<span
-                    class="important-term client">wheel.component.ts</span> כולל תמונה לדף הבית: <span
-                    class="important-term client">shake.jpg</span>.</p>
-            <img src="PIC/3.2.jpg" class="doc-image" alt="Section 2 Visual">
+                    class="important-term client">wheel.component.ts</span> כולל תמונת ה- <span
+                    class="important-term client">shake.png</span> שתומכת בחוויה.</p>
 
             <p><strong>הערה על מאחורי הקלעים:</strong> חוויה חלקה זו התאפשרה רק בגלל תהליך ה-Build הקפדני שקרה קודם לכן
                 במכונת המפתח על תיקיית הלקוח. בעזרת <span class="important-term client">angular.json</span>, <span
@@ -1219,9 +1029,11 @@
                     class="important-term client">tsconfig.app.json</span>), קבצי הלקוח קומפלו דרך מערכת ה-<span
                     class="important-term client">.angular\cache</span> שם בצעו עבודתם <span
                     class="important-term client">.tsbuildinfo</span>, <span
-                    class="important-term client">angular-compiler.db</span>, כלי פיתוח פנימים, <span
-                    class="important-term client">vite</span>, <span class="important-term client">deps</span> ותלויות
-                ה-<span class="important-term client">node_modules</span> לתיקיית הסיום <span
+                    class="important-term client">angular-compiler.db</span>, <span
+                    class="important-term client">angular-compiler.db-lock</span>, כלי פיתוח פנימים, <span
+                    class="important-term client">vite</span>, <span class="important-term client">deps</span> (ו-<span
+                    class="important-term client">deps_ssr</span>) ותלויות ה-<span
+                    class="important-term client">node_modules</span> לתיקיית הסיום <span
                     class="important-term client">dist\tenant-rating-client\browser</span>. תוצר זה ארז את חוקי הבניה,
                 והפיק קבצים מוכנים לדפדפן כמו <span class="important-term client">main-C5ZIQ3YT.js</span>, הפוליפילז
                 <span class="important-term client">polyfills-B6TNHZQ6.js</span>, התצורה הכללית של אבזור המערכת, קובץ
@@ -1231,7 +1043,11 @@
                     class="important-term client">styles-M7RAQLMU.css</span>.
             </p>
 
-            <h4>3. ניסיון אימות ראשון (Client ל-Server)</h4>
+            <h4 id="a-3">3. ניסיון אימות ראשון (Client ל-Server)
+                <a href="#b-3"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[קפוץ לרמת
+                    הפונקציה &darr;]</a>
+            </h4>
             <p>המשתמש (נניח שוכר) לוחץ על כפתור התחברות. קופצת חלונית ה-<span
                     class="important-term client">auth-modal.component.html</span> (הנתמכת על ידי קובץ העיצוב שלה <span
                     class="important-term client">auth-modal.component.scss</span> והקוד שלה <span
@@ -1240,8 +1056,12 @@
                 עוד לפני שהבקשה עוזבת לחלוטין את הדפדפן להמשך הדרך, ה-<span
                     class="important-term client">jwt.interceptor.ts</span> מוודא הזרקת אסימוני אבטחה במידה וישנם לשאר
                 מסלולי ה-<span class="important-term client">prerendered-routes.json</span>.</p>
-            <img src="PIC/3.3.jpg" class="doc-image" alt="Auth Request Visual">
 
+            <h4 id="a-4">4. עבודה מול מסד הנתונים והחזרת תשובה (Server ל-Client)
+                <a href="#b-4"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[קפוץ לרמת
+                    הפונקציה &darr;]</a>
+            </h4>
             <p>כעת שיגרנו את הבקשה לרשת והיא נוחתת בעולם של השרת - אל תוך <span
                     class="important-term server">TenantRating.API</span>. השרת מתעורר דרך ה-<span
                     class="important-term server">Program.cs</span> תוך שאיבת הגדרות סביבה מ-<span
@@ -1252,7 +1072,6 @@
                 הלאה אל המוח – אל ה-<span class="important-term server">AuthService.cs</span> המצוי בתיקיית ה-<span
                     class="important-term server">Services</span>.</p>
 
-            <h4>4. עבודה מול מסד הנתונים והחזרת תשובה (Server ל-Client)</h4>
             <p>ה-<span class="important-term server">AuthService.cs</span> צריך לבדוק אם המשתמש קיים. הוא פונה לשכבת
                 הנתונים (ה-<span class="important-term server">Data</span>) ומתקשר עם מסד הנתונים הפיזי, הגיבוי השמור
                 <span class="important-term server">tenantrating_v2.db</span>. גישה זו נעשית דרך ה-<span
@@ -1260,14 +1079,19 @@
                 המודל <span class="important-term server">User.cs</span>. לשמחתנו, המשתמש נמצא ותואם! השרת מרכיב תשובה
                 חיובית עטופה כ-DTO, משגר אותה בחזרה דרך הבקר, והיא טסה אל מעבר לרשת חזרה לדפדפן של הלקוח.
             </p>
-            <img src="PIC/3.4.jpg" class="doc-image" alt="Database Interaction Visual">
 
-            <h4>5. ניתוב המשתמש לאזור האישי (Client)</h4>
+            <h4 id="a-5">5. ניתוב המשתמש לאזור האישי (Client)
+                <a href="#b-5"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[קפוץ לרמת
+                    הפונקציה &darr;]</a>
+            </h4>
             <p>הדפדפן וקומפוננטת <span class="important-term client">auth.service.ts</span> מקבלים את האישור החיובי.
-                כעת, שומר הניתוב ב-<span class="important-term client">auth.guard.ts</span> נותן אור ירוק לניתוב, והלקוח
-                מחליף את עמוד הבית בעמוד האזור האישי: ה-<span
-                    class="important-term client">tenant-dashboard.component.ts</span> נטען. הממשק החדש למשתמש הסטטוסים
-                מבוסס על שירות בדיקות מותאם - <span class="important-term client">request.service.ts</span>.
+                כעת, שומר הניתוב ב-<span class="important-term client">auth.guard.ts</span> נותן אור ירוק לניתוב. שוכרים
+                בתחילת דרכם מופנים לתיקיית <span class="important-term client">wizard</span> שם ה-<span
+                    class="important-term client">tenant-wizard.component.ts</span> מנהל את תהליך הרישום, בעוד שוכרים
+                קיימים מופנים ל-<span class="important-term client">tenant-dashboard</span> שם ה-<span
+                    class="important-term client">tenant-dashboard.component.ts</span> מציג את נתוניהם בעזרת ה- <span
+                    class="important-term client">request.service.ts</span>.
                 <br><br><em>(חריג: אם מדובר היה במנהל מערכת, ה-<span class="important-term client">admin.guard.ts</span>
                     היה מתיר גישה ל-<span class="important-term client">admin-dashboard.component.ts</span> שמקבל נתונים
                     מ-<span class="important-term client">admin.service.ts</span>, ואילו לשוכרים מחפשים יש את אזור
@@ -1275,12 +1099,15 @@
                         class="important-term client">landlord-search.component.scss</span>, קוד <span
                         class="important-term client">landlord-search.component.ts</span> עם שימוש בשירותי עזר <span
                         class="important-term client">landlord.service.ts</span> וחיפוש בערים מול <span
-                        class="important-term client">cities.service.ts</span>. או אפילו עמודי איפוס סיסמא רגילים כ-
-                    <span class="important-term client">reset-password.component.ts</span>).</em>
+                        class="important-term client">cities.service.ts</span>. או אפילו עמודי איפוס סיסמא רגילים
+                    כ-<span class="important-term client">reset-password.component.ts</span>).</em>
             </p>
-            <img src="PIC/3.5.jpg" class="doc-image" alt="User Dashboard Visual">
 
-            <h4>6. יצירת בקשה חדשה והעברה לשרת (Client ל-Server)</h4>
+            <h4 id="a-6">6. יצירת בקשה חדשה והעברה לשרת (Client ל-Server)
+                <a href="#b-6"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[קפוץ לרמת
+                    הפונקציה &darr;]</a>
+            </h4>
             <p>השוכר המחובר מעוניין לפתוח פרופיל תיוג חדש. הוא ממלא פרטים ומעלה מסמכים. הלקוח אורז זאת ויורה בקשת HTTP
                 חדשה אל השרת. הפעם הבקשה נוחתת ב-<span class="important-term server">RequestsController.cs</span> (או אם
                 היה זה בעל בית ל-<span class="important-term server">LandlordsController.cs</span> או למנהלי האתר
@@ -1294,9 +1121,12 @@
                 האלגוריתם המרכזי והמורכב - מחלקת ה-<span
                     class="important-term server">RentabilityScoreCalculator.cs</span> היישר מתיקיית ה-<span
                     class="important-term server">Logic</span> כדי להחליט על ציון השוכר הסופי.</p>
-            <img src="PIC/3.6.jpg" class="doc-image" alt="Scoring Logic Visual">
 
-            <h4>7. שמירה במערכת והתקשרויות חוץ (פעולות Server עוקבות)</h4>
+            <h4 id="a-7">7. שמירה במערכת והתקשרויות חוץ (פעולות Server עוקבות)
+                <a href="#b-7"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[קפוץ לרמת
+                    הפונקציה &darr;]</a>
+            </h4>
             <p>עם הציון המוכן, השרת מחזיר את שלב השמירה והתיווך לישות <span
                     class="important-term server">Request.cs</span> ומעדכן את המצב במערכו לפי <span
                     class="important-term server">RequestStatus.cs</span> ובגיבוי <span
@@ -1314,9 +1144,12 @@
                 <span class="important-term server">ResetPassword.html</span>). עם גמר העבודות, השרת משגר אישור סופי
                 וקליל אל השוכר הממתין עדיין בהתרגשות, חזרה בדפדפן הלקוח.
             </p>
-            <img src="PIC/3.7.jpg" class="doc-image" alt="External Services Visual">
 
-            <h4>8. מאחורי הקלעים בעולם השרת (כלי פיתוח ותחזוקה)</h4>
+            <h4 id="a-8">8. מאחורי הקלעים בעולם השרת (כלי פיתוח ותחזוקה)
+                <a href="#b-8"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[קפוץ לרמת
+                    הפונקציה &darr;]</a>
+            </h4>
             <p>ובזמן שאנחנו נרגעים, באפליקציה בולעים אוויר: יש כלי עזר מיוחדים שדואגים שמסד הנתונים לעולם לא יקרוס
                 וישתנה בצורה יעילה: תיקיית ה-<span class="important-term server">db_tools</span> המבוססת על סביבה של
                 Node.js, ולכן מחזיקה בעצמה <span class="important-term server">package.json</span> ו-<span
@@ -1325,7 +1158,9 @@
                     class="important-term server">read_db.js</span> מול ה- <span
                     class="important-term server">db_dump.txt</span> שמוכן למקרה חירום. קובץ פייתון ייחודי תחת <span
                     class="important-term server">inspect_db.py</span> מאפשר ניתוח אנליטי מהיר במקרים מורכבים במיוחד.
-                <br><br>כמו בלקוח - כדאי לזכור ששרת עצום זה נוצר תחילה באמצעות ה-<span
+            </p>
+
+            <p>כמו בלקוח - כדאי לזכור ששרת עצום זה נוצר תחילה באמצעות ה-<span
                     class="important-term server">TenantRating.API.csproj</span> שדאג בקימפולו לתוצרי ביניים בתיקיות
                 ה-<span class="important-term server">obj</span> התצורה ו-<span class="important-term server">bin</span>
                 (כגון <span class="important-term server">Debug\net9.0</span> למיניהן - <span
@@ -1339,10 +1174,189 @@
                 ה-<span class="important-term server">AppDbContextModelSnapshot.cs</span>. לאלה ולסופים הוסיפו תמיד כלי
                 תחזוקה כמו אתחול נתונים ראשוניים בעזרת עבודת כפיים ב-<span
                     class="important-term server">DataSeeder.cs</span>, או קריאת נתוני בניית ריצה ב-<span
-                    class="important-term server">build_output.txt</span>.
-            </p>
-            <img src="PIC/3.8.jpg" class="doc-image" alt="Dev Tools Visual">
+                    class="important-term server">build_output.txt</span>.</p>
         </div>
+
+        <hr style="margin: 50px 0; border: 0; border-top: 2px dashed var(--border);">
+
+        <h3 id="part-b">חלק ב': תיאור הזרימה עד לרמת הפונקציה</h3>
+        <div class="story-box" style="border-right-color: var(--primary);">
+
+            <h4 id="b-1">1. כניסת המשתמש וטעינת הלקוח (Client) - עד לרמת הפונקציה
+                <a href="#a-1"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
+                    הקובץ &uarr;]</a>
+            </h4>
+            <p>בתוך עולם ה-<span class="important-term client">TenantRating.Client</span> ותיקיית ה-<span
+                    class="important-term client">src</span>, הדפדפן מריץ את קובץ ה- <span
+                    class="important-term client">main.ts</span> המפעיל את פונקציית <span
+                    class="function-marker client">bootstrapApplication()</span> אשר "מזריקה" את רכיב הבסיס לתוך ה-DOM.
+                פונקציה זו מאתחלת את האפליקציה תוך הזרקת תצורות מ- <span
+                    class="important-term client">app.config.ts</span>, כגון <span
+                    class="function-marker client">provideRouter(routes)</span> המגדיר את עץ הכתובות וקובע מתי לטעון
+                רכיבים בצורה מושהית (Lazy Loading). במקביל, רכיב האב <span
+                    class="important-term client">app.component.ts</span> מתעורר ומקשר בין ה-HTML של ה-<span
+                    class="important-term client">app.component.html</span> לבין העיצוב ב-<span
+                    class="important-term client">app.component.scss</span> דרך דקורטור ה-<span
+                    class="function-marker client">@Component</span> שמגדיר את מטא-דאטה של הרכיב. ה-<span
+                    class="important-term client">index.html</span> משמש כמארח הרשמי לכל התהליך הזה, כאשר תגית ה-root
+                מוחלפת בתוכן האפליקציה.</p>
+
+            <h4 id="b-2">2. תצוגת מסך הבית ועיצוב (Client) - עד לרמת הפונקציה
+                <a href="#a-2"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
+                    הקובץ &uarr;]</a>
+            </h4>
+            <p>בתוך <span class="important-term client">home.component.ts</span>, פונקציית מחזור החיים <span
+                    class="function-marker client">ngOnInit()</span> מופעלת מיד לאחר יצירת הרכיב וטוענת משתנים גלובליים
+                הדרושים ל-<span class="important-term client">home.component.html</span> ו-<span
+                    class="important-term client">home.component.scss</span>. העיצוב הגלובלי מ-<span
+                    class="important-term client">styles.scss</span> מוחל על כל שכבות ה-Shadow DOM, ומשאבים מתיקיית
+                ה-<span class="important-term client">assets</span> (כמו <span
+                    class="important-term client">lines.png</span>, <span
+                    class="important-term client">favicon.svg</span>, <span
+                    class="important-term client">loginRegister.jpeg</span>) נשאבים לנתיבי ה-Static. רכיב ה- <span
+                    class="important-term client">three-cube.component.ts</span> מפעיל את <span
+                    class="function-marker client">initThreeJS()</span> המקימה את ה-"Scene", ה-"Camera" וה-"Renderer"
+                לרינדור הקוביה ב-<span class="important-term client">three-cube.component.html</span>. האנימציות ב-<span
+                    class="important-term client">wheel.component.ts</span> מופעלות תוך הצגת ה-<span
+                    class="important-term client">shake.png</span> ליצירת אפקט רעידה חזותי.
+                <br><br>בתהליך ה-Build, ה-<span class="important-term client">angular.json</span>, <span
+                    class="important-term client">package.json</span> ו-<span
+                    class="important-term client">tsconfig.app.json</span> קובעים את חוקי הטרנספילציה מ-TS ל-JS. ה-<span
+                    class="important-term client">.angular\cache</span> משתמש ב-<span
+                    class="important-term client">angular-compiler.db-lock</span> כדי לנעול גישה למטמון בזמן ש-<span
+                    class="important-term client">vite</span> ו-<span class="important-term client">deps_ssr</span>
+                מבצעים Bundle לקוד. התוצר הסופי ב-<span
+                    class="important-term client">dist\tenant-rating-client\browser</span> (כולל ה-<span
+                    class="important-term client">main-C5ZIQ3YT.js</span> שמכיל את לוגיקת האפליקציה הדחוסה, ה-<span
+                    class="important-term client">polyfills-B6TNHZQ6.js</span> המגשר על פערי דפדפנים וה-<span
+                    class="important-term client">styles-M7RAQLMU.css</span> המכיל סלקטורים מקומפלים) נוצר בתהליך של
+                Minification ו-Tree Shaking.
+            </p>
+
+            <h4 id="b-3">3. ניסיון אימות ראשון (Client ל-Server) - עד לרמת הפונקציה
+                <a href="#a-3"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
+                    הקובץ &uarr;]</a>
+            </h4>
+            <p>בתוך <span class="important-term client">auth-modal.component.ts</span>, המשתמש מפעיל את פונקציית <span
+                    class="function-marker client">onSubmit()</span> המבצעת ולידציה ראשונית לערכי הטופס. פונקציה זו
+                קוראת ל- <span class="function-marker client">authService.login(credentials)</span> ב-<span
+                    class="important-term client">auth.service.ts</span> שמבצעת המרה של הנתונים לפורמט JSON ושולחת בקשת
+                POST. ה- <span class="important-term client">jwt.interceptor.ts</span> מתערב דרך פונקציית <span
+                    class="function-marker client">intercept()</span> אשר משכפלת את הבקשה (Clone) ושותלת ב-Header את
+                אסימון ה-Bearer לפני שהיא נשלחת לנתיבים ב-<span
+                    class="important-term client">prerendered-routes.json</span>.</p>
+
+            <h4 id="b-4">4. עבודה מול מסד הנתונים והחזרת תשובה (Server ל-Client) - עד לרמת הפונקציה
+                <a href="#a-4"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
+                    הקובץ &uarr;]</a>
+            </h4>
+            <p>שרת ה-<span class="important-term server">TenantRating.API</span> מתחיל ב-<span
+                    class="important-term server">Program.cs</span> המגדיר את ה-Middleware Pipeline. הבקשה נוחתת ב-
+                <span class="important-term server">AuthController.cs</span> במתודה <span
+                    class="function-marker server">Login()</span> המפעילה מנגנון Model Binding למיפוי ה-JSON ל-<span
+                    class="important-term server">AuthDtos.cs</span>. זו קוראת ל- <span
+                    class="function-marker server">AuthenticateUser()</span> ב-<span
+                    class="important-term server">AuthService.cs</span> המבצעת השוואת Hash לסיסמה. השירות פונה ל- <span
+                    class="important-term server">AppDbContext.cs</span> ומפעיל <span
+                    class="function-marker server">Users.FirstOrDefaultAsync()</span> שמייצרת פקודת SQL SELECT מול הקובץ
+                הפיזי <span class="important-term server">tenantrating_v2.db</span> כדי לחלץ את נתוני ה-<span
+                    class="important-term server">User.cs</span> מהטבלה.</p>
+
+            <h4 id="b-5">5. ניתוב המשתמש לאזור האישי (Client) - עד לרמת הפונקציה
+                <a href="#a-5"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
+                    הקובץ &uarr;]</a>
+            </h4>
+            <p>עם חזרת התשובה ל-Client, ה- <span class="important-term client">auth.guard.ts</span> מפעיל את <span
+                    class="function-marker client">canActivate()</span> הבודק אם קיים טוקן ולידי ב-LocalStorage. לאחר
+                האישור, מופעלת <span class="function-marker client">router.navigateByUrl()</span> המבצעת החלפת View
+                ל-<span class="important-term client">tenant-wizard.component.ts</span> או ל-<span
+                    class="important-term client">tenant-dashboard.component.ts</span>. האחרון משתמש ב-<span
+                    class="function-marker client">getRequests()</span> מתוך <span
+                    class="important-term client">request.service.ts</span> למשיכת נתוני המשתמש. שומרי הניתוב <span
+                    class="important-term client">admin.guard.ts</span> מבצעים בדיקת Role-Based Access עבור ה-<span
+                    class="important-term client">admin-dashboard.component.ts</span>. בחיפוש, ה-<span
+                    class="important-term client">landlord-search.component.ts</span> מפעיל את <span
+                    class="function-marker client">search()</span> שמבצעת פילטור נתונים מ-<span
+                    class="important-term client">landlord.service.ts</span> ו-<span
+                    class="important-term client">cities.service.ts</span>. איפוס סיסמא מפעיל את <span
+                    class="function-marker client">reset()</span> ב-<span
+                    class="important-term client">reset-password.component.ts</span>.</p>
+
+            <h4 id="b-6">6. יצירת בקשה חדשה והעברה לשרת (Client ל-Server) - עד לרמת הפונקציה
+                <a href="#a-6"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
+                    הקובץ &uarr;]</a>
+            </h4>
+            <p>המשתמש לוחץ על כפתור "נתח מסמכים" ב- <span
+                    class="important-term client">tenant-wizard.component.ts</span>, המפעיל את <span
+                    class="function-marker client">processRequest()</span> האוספת את כל ה-Inputs וקבצי ה-Blob. המידע
+                עובר ל- <span class="important-term client">request.service.ts</span> המפעיל את <span
+                    class="function-marker client">submitRequest()</span> המבצעת Multipart Upload. הבקשה נוחתת ב-<span
+                    class="important-term server">RequestsController.cs</span> (או בקונטרולרים <span
+                    class="important-term server">LandlordsController.cs</span> / <span
+                    class="important-term server">AdminController.cs</span>) במתודה <span
+                    class="function-marker server">SubmitRequest()</span> המבצעת "Sanitization" לנתונים שנתקבלו דרך
+                ה-<span class="important-term server">RequestDtos.cs</span>.</p>
+
+            <h4 id="b-7">7. שמירה במערכת והתקשרויות חוץ (פעולות Server עוקבות) - עד לרמת הפונקציה
+                <a href="#a-7"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
+                    הקובץ &uarr;]</a>
+            </h4>
+            <p>רצף העבודה בשרת:<br>
+                1. <span class="important-term server">OcrService.cs</span> מפעיל את <span
+                    class="function-marker server">AnalyzePayslipsAsync()</span> המשתמשת ב-AI לזיהוי שדות טקסטואליים
+                בתוך הקבצים הבינאריים.<br>
+                2. <span class="important-term server">ScoringService.cs</span> מריץ את <span
+                    class="function-marker server">CalculateScoreForRequest()</span> המאגדת את נתוני ה-OCR ונתוני
+                המשתמש.<br>
+                3. ב-<span class="important-term server">RentabilityScoreCalculator.cs</span> (תיקיית <span
+                    class="important-term server">Logic</span>), הפונקציה <span
+                    class="function-marker server">CalculateTempScore()</span> מחשבת יחס הכנסה מול הוצאה, ו-<span
+                    class="function-marker server">CalculateFinalScore()</span> מבצעת נורמליזציה של התוצאה לטווח 0-100
+                וקובעת את ה-<span class="important-term server">RequestStatus.cs</span>.<br>
+                4. השמירה ב-DB מתבצעת דרך <span class="important-term server">AppDbContext.cs</span> בעזרת <span
+                    class="function-marker server">SaveChangesAsync()</span> שמתרגמת את השינויים ב-<span
+                    class="important-term server">Request.cs</span> ו-<span
+                    class="important-term server">SavedRequest.cs</span> לטרנזקציית SQL.<br>
+                5. הודעות חוץ: <span class="function-marker server">SendSmsAsync()</span> ב-<span
+                    class="important-term server">SmsService.cs</span> שולחת הודעת עדכון, ו-<span
+                    class="function-marker server">SendEmailAsync()</span> ב-<span
+                    class="important-term server">ResendEmailService.cs</span> מושכת את העיצוב דרך <span
+                    class="function-marker server">GetTemplateAsync()</span> ב-<span
+                    class="important-term server">EmailTemplateService.cs</span> מתוך תיקיית ה-<span
+                    class="important-term server">Templates</span> (קבצי <span
+                    class="important-term server">RequestCreated.html</span> ו-<span
+                    class="important-term server">ResetPassword.html</span>). ב-Client, פונקציית ה-<span
+                    class="function-marker client">subscribe()</span> מאזינה לתשובה ומעדכנת את רכיב ה-UI.</p>
+
+            <h4 id="b-8">8. מאחורי הקלעים בעולם השרת (כלי פיתוח ותחזוקה) - עד לרמת הפונקציה
+                <a href="#a-8"
+                    style="font-size: 0.7em; margin-right: 15px; color: var(--primary); font-weight: normal;">[חזור לרמת
+                    הקובץ &uarr;]</a>
+            </h4>
+            <p>ה- <span class="important-term server">DataSeeder.cs</span> מפעיל את <span
+                    class="function-marker server">SeedAsync()</span> שבודקת אם הטבלאות ריקות ומזריקה נתוני דמו. ה-<span
+                    class="important-term server">db_tools</span> מריץ את <span
+                    class="important-term server">read_db.js</span> המפעיל את פונקציית <span
+                    class="function-marker server">fs.readFileSync()</span> לטעינת ה-<span
+                    class="important-term server">db_dump.txt</span> לזיכרון. קובץ ה-<span
+                    class="important-term server">inspect_db.py</span> מריץ פונקציות Pandas לניתוח סטטיסטי. תהליך
+                ה-Build ב-<span class="important-term server">TenantRating.API.csproj</span> מקמפל את ה-<span
+                    class="important-term server">obj</span> וה-<span class="important-term server">bin</span> (כולל
+                ה-<span class="important-term server">project.assets.json</span> המנהל תלויות NuGet) ומתעד שגיאות
+                ב-<span class="important-term server">build_output.txt</span>. המיגרציות משתמשות ב-<span
+                    class="function-marker server">Up()</span> לשינוי הסכימה וב-<span
+                    class="function-marker server">Down()</span> לביטולו בקבצים כמו <span
+                    class="important-term server">20260208221643_InitialCreate.cs</span>, תוך סינכרון ה-<span
+                    class="important-term server">AppDbContextModelSnapshot.cs</span>.</p>
+        </div>
+
 
         <p style="text-align: center; margin-top: 50px; color: var(--secondary); font-size: 0.9em;">
             הופק ע"י Antigravity עבור פרויקט Tenant Rating | כולל 100+ מרכיבי הארכיטקטורה.
@@ -1351,5 +1365,3 @@
 </body>
 
 </html>
-
-
